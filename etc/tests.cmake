@@ -7,7 +7,7 @@ add_test(NAME ${compile_name}
   COMMAND "${CMAKE_COMMAND}" --build "${CMAKE_BINARY_DIR}" -t functionality_testing webget)
 
 macro (ttest name)
-  add_test(NAME ${name} COMMAND ${name})
+  add_test(NAME ${name} COMMAND "${name}_sanitized")
   set_property(TEST ${name} PROPERTY FIXTURES_REQUIRED compile)
 endmacro (ttest)
 
