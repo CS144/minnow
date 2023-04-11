@@ -31,9 +31,9 @@ void speed_test( const size_t num_chunks,   // NOLINT(bugprone-easily-swappable-
   // Split the data into segments before writing
   queue<tuple<uint64_t, string, bool>> split_data;
   for ( size_t i = 0; i < data.size(); i += capacity ) {
-    split_data.emplace( i + 2, data.substr( i + 2, capacity * 2 ), true );
-    split_data.emplace( i, data.substr( i, capacity * 2 ), false );
-    split_data.emplace( i + 1, data.substr( i + 1, capacity * 2 ), true );
+    split_data.emplace( i + 2, data.substr( i + 2, capacity * 2 ), i + 2 + capacity * 2 >= data.size() );
+    split_data.emplace( i, data.substr( i, capacity * 2 ), i + capacity * 2 >= data.size() );
+    split_data.emplace( i + 1, data.substr( i + 1, capacity * 2 ), i + 1 + capacity * 2 >= data.size() );
   }
 
   ByteStream stream { capacity };
