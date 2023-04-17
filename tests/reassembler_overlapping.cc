@@ -124,6 +124,25 @@ int main()
       test.execute( BytesPending( 0 ) );
     }
 
+    {
+      // Hole filled progressively and with overlap. Credit: Sarah McCarthy
+
+      ReassemblerTestHarness test { "hole filled with overlap", 20 };
+
+      test.execute( Insert { "fgh", 5 } );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( ReadAll( "" ) );
+      test.execute( IsFinished { false } );
+
+      test.execute( Insert { "abc", 0 } );
+      test.execute( BytesPushed( 3 ) );
+
+      test.execute( Insert { "abcdef", 0 } );
+      test.execute( BytesPushed( 8 ) );
+      test.execute( BytesPending( 0 ) );
+      test.execute( ReadAll( "abcdefgh" ) );
+    }
+
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
