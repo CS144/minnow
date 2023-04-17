@@ -143,6 +143,67 @@ int main()
       test.execute( ReadAll( "abcdefgh" ) );
     }
 
+    {
+      // Multiple overlap. Credit: Sebastian Ingino
+      ReassemblerTestHarness test { "multiple overlaps", 1000 };
+
+      test.execute( Insert { "c", 2 } );
+      test.execute( Insert { "e", 4 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 2 ) );
+
+      test.execute( Insert { "bcdef", 1 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 5 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( ReadAll( "abcdef" ) );
+      test.execute( BytesPushed( 6 ) );
+      test.execute( BytesPending( 0 ) );
+    }
+
+    {
+      // Overlap between two pending. Credit: Sebastian Ingino.
+      ReassemblerTestHarness test { "overlap between two pending", 1000 };
+
+      test.execute( Insert { "bc", 1 } );
+      test.execute( Insert { "ef", 4 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 4 ) );
+
+      test.execute( Insert { "cde", 2 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 5 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( ReadAll( "abcdef" ) );
+      test.execute( BytesPushed( 6 ) );
+      test.execute( BytesPending( 0 ) );
+    }
+
+    {
+      // Add exact copy. Credit: Sebastian Ingino.
+      ReassemblerTestHarness test { "exact copy", 1000 };
+
+      test.execute( Insert { "b", 1 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 1 ) );
+
+      test.execute( Insert { "b", 1 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 1 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( ReadAll( "ab" ) );
+      test.execute( BytesPushed( 2 ) );
+      test.execute( BytesPending( 0 ) );
+    }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
