@@ -38,7 +38,7 @@ void do_test_1( const TCPConfig& cfg, default_random_engine& rd )
   uint64_t max_expect_ackno = 1;
   for ( auto [off, sz] : seq_size ) {
     test_1.execute( SegmentArrives {}.with_seqno( rx_isn + 1 + off ).with_data( d.substr( off, sz ) ) );
-    if ( off == min_expect_ackno ) {
+    if ( off + 1 == min_expect_ackno ) {
       min_expect_ackno = min_expect_ackno + sz;
     }
     max_expect_ackno = max_expect_ackno + sz;
@@ -87,7 +87,7 @@ void do_test_2( const TCPConfig& cfg, default_random_engine& rd )
   uint64_t max_expect_ackno = 1;
   for ( auto [off, sz] : seq_size ) {
     test_2.execute( SegmentArrives {}.with_seqno( rx_isn + 1 + off ).with_data( d.substr( off, sz ) ) );
-    if ( off <= min_expect_ackno && off + sz > min_expect_ackno ) {
+    if ( off + 1 <= min_expect_ackno && off + sz + 1 > min_expect_ackno ) {
       min_expect_ackno = sz + off;
     }
     max_expect_ackno = max_expect_ackno + sz; // really loose because of overlap
