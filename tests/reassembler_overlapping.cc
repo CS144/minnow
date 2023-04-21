@@ -255,6 +255,23 @@ int main()
       test.execute( BytesPushed( 2 ) );
       test.execute( BytesPending( 0 ) );
     }
+
+    {
+      // Credit: Chenhao Li
+      const size_t cap = { 1000 };
+      ReassemblerTestHarness test { "overlapping multiple unassembled sections 2", cap };
+
+      test.execute( Insert { "bcd", 1 } );
+      test.execute( Insert { "cde", 2 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 4 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( ReadAll( "abcde" ) );
+      test.execute( BytesPushed( 5 ) );
+      test.execute( BytesPending( 0 ) );
+    }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
