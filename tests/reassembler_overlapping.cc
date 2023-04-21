@@ -204,6 +204,43 @@ int main()
       test.execute( BytesPushed( 2 ) );
       test.execute( BytesPending( 0 ) );
     }
+
+    {
+      // Credit: Anonymous (2023)
+      ReassemblerTestHarness test { "yet another overlap test", 150 };
+
+      test.execute( Insert { "efgh", 4 } );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 4 ) );
+
+      test.execute( Insert { "op", 14 } );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 6 ) );
+
+      test.execute( Insert { "s", 18 } );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 7 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( BytesPushed( 1 ) );
+      test.execute( BytesPending( 7 ) );
+
+      test.execute( Insert { "abcde", 0 } );
+      test.execute( BytesPushed( 8 ) );
+      test.execute( BytesPending( 3 ) );
+
+      test.execute( Insert { "opqrst", 14 } );
+      test.execute( BytesPushed( 8 ) );
+      test.execute( BytesPending( 6 ) );
+
+      test.execute( Insert { "op", 14 } );
+      test.execute( BytesPushed( 8 ) );
+      test.execute( BytesPending( 6 ) );
+
+      test.execute( Insert { "ijklmn", 8 } );
+      test.execute( BytesPushed( 20 ) );
+      test.execute( BytesPending( 0 ) );
+    }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
