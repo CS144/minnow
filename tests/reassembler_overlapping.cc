@@ -241,6 +241,20 @@ int main()
       test.execute( BytesPushed( 20 ) );
       test.execute( BytesPending( 0 ) );
     }
+
+    {
+      // Credit: Eli Wald
+      ReassemblerTestHarness test { "small capacity with overlapping insert", 2 };
+      test.execute( Insert { "bc", 1 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 1 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( ReadAll( "ab" ) );
+      test.execute( BytesPushed( 2 ) );
+      test.execute( BytesPending( 0 ) );
+    }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
