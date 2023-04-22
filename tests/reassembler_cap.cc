@@ -97,6 +97,23 @@ int main()
       test.execute( ReadAll( "c" ) );
     }
 
+    {
+      ReassemblerTestHarness test { "cafeb0ba with special chars", 16 };
+
+      test.execute( Insert { {0x30, 0x0d, 0x62, 0x00, 0x61, 0x00, 0x00}, 9 } );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( ReadAll( "" ) );
+      test.execute( IsFinished { false } );
+
+      test.execute( Insert { {0x0d, 0x0a, 0x63, 0x61, 0x0a, 0x66}, 0 } );
+      test.execute( BytesPushed( 6 ) );
+
+      test.execute( Insert { {0x0d, 0x0a, 0x63, 0x61, 0x0a, 0x66, 0x65, 0x20, 0x62, 0x30}, 0 } );
+      test.execute( BytesPushed( 16 ) );
+      test.execute( BytesPending( 0 ) );
+      test.execute( ReadAll( {0x0d, 0x0a, 0x63, 0x61, 0x0a, 0x66, 0x65, 0x20, 0x62, 0x30, 0x0d, 0x62, 0x00, 0x61, 0x00, 0x00} ) );
+    }
+
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
