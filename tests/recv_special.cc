@@ -118,6 +118,69 @@ int main()
       test.execute( ReadAll { "Hello and goodbye, CS144!" } );
       test.execute( IsFinished { true } );
     }
+
+    // credit: Mustafa Bayramov
+    {
+      const size_t cap = 10;
+      const uint32_t isn = 23452;
+      TCPReceiverTestHarness test { "buffer full, keep pushing", cap };
+      test.execute( SegmentArrives {}.with_syn().with_seqno( isn ) );
+      test.execute( ExpectAckno { Wrap32 { isn + 1 } } );
+      test.execute( ExpectWindow { cap } );
+      test.execute( SegmentArrives {}.with_seqno( isn + 1 ).with_data( "abcde" ) );
+      test.execute( ExpectAckno { Wrap32 { isn + 6 } } );
+      test.execute( ExpectWindow { cap - 5 } );
+      test.execute( BytesPushed { 5 } );
+      test.execute( SegmentArrives {}.with_seqno( isn + 6 ).with_data( "fghij" ) );
+      test.execute( ExpectAckno { Wrap32 { isn + 11 } } );
+      test.execute( ExpectWindow { 0 } );
+      test.execute( BytesPushed { 10 } );
+      // buffer we keep pushing
+      test.execute( SegmentArrives {}.with_seqno( isn + 11 ).with_data( "klmno" ) );
+      test.execute( ExpectAckno { Wrap32 { isn + 11 } } );
+      test.execute( ExpectWindow { 0 } );
+      test.execute( BytesPushed { 10 } );
+      test.execute( SegmentArrives {}.with_seqno( isn + 16 ).with_data( "pqrst" ) );
+      test.execute( ExpectAckno { Wrap32 { isn + 11 } } );
+      test.execute( ExpectWindow { 0 } );
+      test.execute( BytesPushed { 10 } );
+      test.execute( ReadAll { "abcdefghij" } );
+    }
+
+    {
+      const size_t cap = 10;
+      const uint32_t isn = 12345;
+      TCPReceiverTestHarness test { "missing first byte in the first segment", cap };
+      test.execute( SegmentArrives {}.with_syn().with_seqno( isn ) );
+      test.execute( SegmentArrives {}.with_seqno( isn + 1 ).with_data( "" ) );
+      test.execute( SegmentArrives {}.with_seqno( isn + 2 ).with_data( "a" ) );
+      test.execute( SegmentArrives {}.with_seqno( isn + 4 ).with_data( "b" ) );
+      test.execute( SegmentArrives {}.with_seqno( isn + 6 ).with_data( "c" ) );
+      test.execute( SegmentArrives {}.with_seqno( isn + 8 ).with_data( "d" ) );
+      test.execute( BytesPushed { 0 } );
+      test.execute( ExpectWindow { 10 } );
+      test.execute( ExpectAckno { Wrap32 { isn + 1 } } );
+    }
+
+    {
+      const size_t cap = 10;
+      const uint32_t isn = 123456;
+      TCPReceiverTestHarness test { "pushing bytes in reverse order in initial SYN", cap };
+      test.execute( SegmentArrives {}.with_syn().with_seqno( isn ) );
+      vector<uint8_t> bytes = { 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a' };
+      for ( int i = cap - 1; i >= 1; --i ) {
+        test.execute(
+          SegmentArrives {}.with_seqno( isn + i + 1 ).with_data( std::string( 1, bytes[cap - i - 1] ) ) );
+        test.execute( ExpectAckno { Wrap32 { isn + 1 } } );
+        test.execute( BytesPushed { 0 } );
+        test.execute( ExpectWindow { 10 } );
+      }
+      test.execute( SegmentArrives {}.with_seqno( isn + 1 ).with_data( std::string( 1, bytes[cap - 1] ) ) );
+      test.execute( BytesPushed { bytes.size() } );
+      test.execute( ExpectWindow { 0 } );
+      test.execute( ExpectAckno { Wrap32 { static_cast<uint32_t>( isn + bytes.size() + 1 ) } } );
+      test.execute( ReadAll { "abcdefghij" } );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
