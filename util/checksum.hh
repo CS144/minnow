@@ -17,7 +17,7 @@ public:
   explicit InternetChecksum( const uint32_t sum = 0 ) : sum_( sum ) {}
   void add( std::string_view data )
   {
-    for ( uint8_t i : data ) {
+    for ( const uint8_t i : data ) {
       uint16_t val = i;
       if ( not parity_ ) {
         val <<= 8;

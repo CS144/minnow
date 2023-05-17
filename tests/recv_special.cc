@@ -167,7 +167,7 @@ int main()
       const uint32_t isn = 123456;
       TCPReceiverTestHarness test { "pushing bytes in reverse order in initial SYN", cap };
       test.execute( SegmentArrives {}.with_syn().with_seqno( isn ) );
-      vector<uint8_t> bytes = { 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a' };
+      string bytes = { 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a' };
       for ( int i = cap - 1; i >= 1; --i ) {
         test.execute(
           SegmentArrives {}.with_seqno( isn + i + 1 ).with_data( std::string( 1, bytes[cap - i - 1] ) ) );

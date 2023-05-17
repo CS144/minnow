@@ -40,8 +40,8 @@ struct SendDatagram : public Action<NetworkInterface>
 template<class T>
 bool equal( const T& t1, const T& t2 )
 {
-  std::vector<Buffer> t1s = serialize( t1 );
-  std::vector<Buffer> t2s = serialize( t2 );
+  const std::vector<Buffer> t1s = serialize( t1 );
+  const std::vector<Buffer> t2s = serialize( t2 );
 
   std::string t1concat;
   for ( const auto& x : t1s ) {

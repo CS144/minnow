@@ -56,7 +56,7 @@ EthernetFrame make_frame( const EthernetAddress& src,
   frame.header.src = src;
   frame.header.dst = dst;
   frame.header.type = type;
-  frame.payload = payload;
+  frame.payload = std::move( payload );
   return frame;
 }
 
@@ -87,7 +87,7 @@ int main()
         make_frame(
           target_eth,
           local_eth,
-          EthernetHeader::TYPE_ARP,
+          EthernetHeader::TYPE_ARP, // NOLINTNEXTLINE(*-suspicious-*)
           serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth, "192.168.0.1", local_eth, "4.3.2.1" ) ) ),
         {} } );
 
@@ -202,7 +202,7 @@ int main()
         make_frame(
           target_eth,
           local_eth,
-          EthernetHeader::TYPE_ARP,
+          EthernetHeader::TYPE_ARP, // NOLINTNEXTLINE(*-suspicious-*)
           serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth, "192.168.0.1", local_eth, "4.3.2.1" ) ) ),
         {} } );
 
