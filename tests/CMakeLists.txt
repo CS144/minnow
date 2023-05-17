@@ -67,5 +67,7 @@ add_test_exec(send_ack)
 add_test_exec(send_close)
 add_test_exec(send_extra)
 
+add_test_exec(net_interface)
+
 add_speed_test(byte_stream_speed_test)
 add_speed_test(reassembler_speed_test)
