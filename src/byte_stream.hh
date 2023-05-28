@@ -13,6 +13,7 @@ class ByteStream
 protected:
   uint64_t capacity_;
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
+  
 
 public:
   explicit ByteStream( uint64_t capacity );
