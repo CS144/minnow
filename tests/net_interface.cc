@@ -320,6 +320,48 @@ int main()
         serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "10.0.0.1", {}, "10.0.0.5" ) ) ) } );
       test.execute( ExpectNoFrame {} );
     }
+
+    {
+      const EthernetAddress local_eth = random_private_ethernet_address();
+      NetworkInterfaceTestHarness test { "Make sure there are no pending datagrams", local_eth, Address( "4.3.2.1", 0 ) };
+
+      const auto datagram = make_datagram( "5.6.7.8", "13.12.11.10" );
+      test.execute( SendDatagram { datagram, Address( "192.168.0.1", 0 ) } );
+
+      // Outgoing datagram should result in an ARP request.
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        ETHERNET_BROADCAST,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "4.3.2.1", {}, "192.168.0.1" ) ) ) } );
+      test.execute( ExpectNoFrame {} );
+      const EthernetAddress target_eth = random_private_ethernet_address();
+
+      // Reply should result in the queued datagram getting sent => TYPE_IPv4 reply.
+      test.execute( ReceiveFrame {
+        make_frame(
+          target_eth,
+          local_eth,
+          EthernetHeader::TYPE_ARP, // NOLINTNEXTLINE(*-suspicious-*)
+          serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth, "192.168.0.1", local_eth, "4.3.2.1" ) ) ),
+        {} } );
+      test.execute(
+        ExpectFrame { make_frame( local_eth, target_eth, EthernetHeader::TYPE_IPv4, serialize( datagram ) ) } );
+
+      // There should be no more pending datagrams in queue => TYPE_ARP reply.
+      test.execute( ReceiveFrame {
+        make_frame(
+          target_eth,
+          local_eth,
+          EthernetHeader::TYPE_ARP, // NOLINTNEXTLINE(*-suspicious-*)
+          serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth, "192.168.0.1", local_eth, "4.3.2.1" ) ) ),
+        {} } );
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        target_eth,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REPLY, local_eth, "4.3.2.1", target_eth, "192.168.0.1" ) ) ) } );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return EXIT_FAILURE;
