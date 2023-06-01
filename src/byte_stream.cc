@@ -1,48 +1,55 @@
 #include "byte_stream.hh"
 #include <cstdint>
 #include <stdexcept>
+#include <string>
 #include <string_view>
 using namespace std;
-ByteStream::ByteStream( uint64_t capacity ) 
-:capacity_(capacity),buf_(0),close_(false),error_(false),bytes_popped_(0),bytes_pushed_(0){
-}
+ByteStream::ByteStream( uint64_t capacity )
+  : capacity_( capacity )
+  , data_queue_ {}
+  , data_view_ {}
+  , is_closed_( false )
+  , has_error_( false )
+  //, front_( 0 )
+  //, back_( 0 )
+  , bytes_popped_( 0 )
+  , bytes_pushed_( 0 )
+{}
 void Writer::push( string data )
 {
-  if(error_){
-    throw runtime_error("The stream has error. Push failed.\n");
+  if ( has_error_ ) {
+    throw runtime_error( "The stream has error. Push failed.\n" );
   }
-  if(close_){
-   // throw runtime_error("The stream is closed. Push failed.\n");
-   return;
+  if ( is_closed_ ) {
+    return;
   }
-  if(available_capacity()>=data.size()){
-    for(const auto& d:data){
-      buf_.push_back(d);
-    }
-    bytes_pushed_+=data.size();
+  uint64_t topush = 0;
+  if ( data.size() <= available_capacity() ) {
+    topush = data.size();
+  } else {
+    topush = available_capacity();
   }
-  else{//cap<data.size
-    for(auto it=data.begin();it!=data.begin()+static_cast<int64_t>(available_capacity());++it){
-      buf_.push_back(*it);
-    }
-    bytes_pushed_+=available_capacity();
-  }
+  data_queue_.push_back( data.substr( 0, topush ) );
+  string_view now(data_queue_.back().data(),1);
+  data_view_.push_back(now);
+  bytes_pushed_ += topush;
 }
+
 void Writer::close()
 {
-  close_=true; 
+  is_closed_ = true;
 }
 void Writer::set_error()
 {
-  error_=true;
+  has_error_ = true;
 }
 bool Writer::is_closed() const
 {
-  return close_;
+  return is_closed_;
 }
 uint64_t Writer::available_capacity() const
 {
-  return capacity_-(bytes_pushed_-bytes_popped_);
+  return capacity_ - ( bytes_pushed_ - bytes_popped_ );
 }
 uint64_t Writer::bytes_pushed() const
 {
@@ -50,46 +57,47 @@ uint64_t Writer::bytes_pushed() const
 }
 string_view Reader::peek() const
 {
-  static string ss;
-  ss.clear();
-  for(auto it=buf_.begin();it!=buf_.begin()+static_cast<int64_t>(bytes_buffered());++it){
-    ss+=*it;
-  }
-  return ss;
+  static string sssss="z\0";
+  return string_view(&sssss[0],1ul);
 }
 bool Reader::is_finished() const
 {
-  return close_&&!bytes_buffered();
+  return is_closed_ &&  bytes_pushed_ == bytes_popped_;
 }
 bool Reader::has_error() const
 {
-  return error_;
+  return has_error_;
 }
 void Reader::pop( uint64_t len )
 {
-  if(has_error()){
-    throw runtime_error("The stream has error. Read failed.\n");
+  if ( has_error() ) {
+    throw runtime_error( "The stream has error. Read failed.\n" );
   }
-  if(is_finished()){
-    //throw runtime_error("The stream is finished. Read failed.\n");
+  if ( is_finished() ) {
     return;
   }
-  if(bytes_buffered()>=len){
-    for(uint64_t i=0;i<len;++i){
-      buf_.pop_front();
+  if ( len <= bytes_buffered() ) {
+    uint64_t cur = len;
+    while ( data_view_.front().size() <= cur ) {
+      cur -= data_view_.front().size();
+      data_queue_.pop_front();
+      data_view_.pop_front();
+    } // cur<front.sz(maybe cur == 0)
+    if ( cur == 0 ) {
+      return;
     }
-    bytes_popped_+=len;
-  }
-  else{//buf<len
-    while(!buf_.empty()) { 
-      buf_.pop_front();
-    }
-    bytes_popped_+=bytes_buffered();
+    // data_queue_.front();
+    data_view_.front().remove_prefix( cur );
+    bytes_popped_ += len;
+  } else {
+    data_view_.clear();
+    data_queue_.clear();
+    bytes_popped_ += bytes_buffered();
   }
 }
- uint64_t Reader::bytes_buffered() const
+uint64_t Reader::bytes_buffered() const
 {
-  return bytes_pushed_-bytes_popped_;
+  return bytes_pushed_ - bytes_popped_;
 }
 uint64_t Reader::bytes_popped() const
 {
