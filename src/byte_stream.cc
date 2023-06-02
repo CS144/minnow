@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <version>
 using namespace std;
 ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ), data_queue_ {}, data_view_ {} {}
 void Writer::push( string data )
@@ -17,10 +18,11 @@ void Writer::push( string data )
     return;
   }
   auto const topush=min(available_capacity(),data.length());
-  if(topush<data.size()){
+  if(topush<data.length()){
     data=data.substr(0,topush);
   }
-  data_queue_.push_back(move(data));
+  //const string s;
+  data_queue_.push_back(std::move(data));
   data_view_.emplace_back(data_queue_.back().data(),topush);
   bytes_pushed_+=topush;
 }
@@ -72,15 +74,26 @@ void Reader::pop( uint64_t len )
     return;
   }
   auto topop=min(len,bytes_buffered());
-  while(topop>=data_view_.front().size()){
-    topop-=data_view_.front().size();
-    data_queue_.pop_front();
+  //auto n = min( len, num_bytes_buffered_ );
+  while ( topop > 0 ) {
+    auto sz = data_view_.front().length();
+    if ( topop < sz ) {
+      data_view_.front().remove_prefix( topop );
+      //num_bytes_buffered_ -= n;
+      bytes_popped_ += topop;
+      return;
+    }
     data_view_.pop_front();
+    data_queue_.pop_front();
+    topop -= sz;
+    //num_bytes_buffered_ -= sz;
+    bytes_popped_ += sz;
   }
-  if(topop){
-    data_view_.front().remove_prefix(topop); 
-  }
-  bytes_popped_+=topop;
+
+// 作者：haha
+// 链接：https://zhuanlan.zhihu.com/p/630739394
+// 来源：知乎
+// 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 }
 uint64_t Reader::bytes_buffered() const
 {

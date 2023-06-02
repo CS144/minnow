@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 cd build
 make
 cd ..
