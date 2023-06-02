@@ -4,7 +4,7 @@
 #include <string>
 #include <string_view>
 using namespace std;
-ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ), buf_() {}
+ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ), data_queue_ {}, data_view_ {} {}
 void Writer::push( string data )
 {
   if ( has_error_ ) {
@@ -13,12 +13,16 @@ void Writer::push( string data )
   if ( is_closed_ ) {
     return;
   }
-  auto size = min( data.length(), capacity_ - buf_.size() );
-  data = data.substr( 0, size );
-  for ( const auto& c : data ) {
-    buf_.push_back( c );
+  if ( data.empty() || available_capacity() == 0 ) {
+    return;
   }
-  bytes_pushed_ += size;
+  auto const topush=min(available_capacity(),data.length());
+  if(topush<data.size()){
+    data=data.substr(0,topush);
+  }
+  data_queue_.push_back(move(data));
+  data_view_.emplace_back(data_queue_.back().data(),topush);
+  bytes_pushed_+=topush;
 }
 
 void Writer::close()
@@ -43,8 +47,10 @@ uint64_t Writer::bytes_pushed() const
 }
 string_view Reader::peek() const
 {
-  // string t{"z"};
-  return string_view { &buf_.front(), 1ul };
+  if(data_view_.empty()) { 
+    return {};
+  }
+  return data_view_.front();
 }
 bool Reader::is_finished() const
 {
@@ -62,9 +68,19 @@ void Reader::pop( uint64_t len )
   if ( is_finished() ) {
     return;
   }
-  auto size = min( len, buf_.size() );
-  buf_.erase( buf_.begin(), buf_.begin() + size );
-  bytes_popped_ += size;
+  if(len==0||data_view_.empty()){
+    return;
+  }
+  auto topop=min(len,bytes_buffered());
+  while(topop>=data_view_.front().size()){
+    topop-=data_view_.front().size();
+    data_queue_.pop_front();
+    data_view_.pop_front();
+  }
+  if(topop){
+    data_view_.front().remove_prefix(topop); 
+  }
+  bytes_popped_+=topop;
 }
 uint64_t Reader::bytes_buffered() const
 {

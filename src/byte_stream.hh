@@ -10,9 +10,9 @@ class ByteStream
 {
 protected:
   uint64_t capacity_;
-  // std::deque<std::string> data_queue_;
-  // std::deque<std::string_view> data_view_;
-  std::deque<char> buf_;
+  std::deque<std::string> data_queue_;
+  std::deque<std::string_view> data_view_;
+  //std::deque<char> buf_;
   bool is_closed_ = false;
   bool has_error_ = false;
   // uint64_t front_;
