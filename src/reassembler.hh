@@ -1,9 +1,23 @@
 #pragma once
-
 #include "byte_stream.hh"
-
+#include <cstdint>
+#include <queue>
+#include <set>
 #include <string>
-
+#include <vector>
+struct block_node
+{
+  uint64_t begin {};
+  uint64_t length { 0 };
+  uint64_t end{};
+  std::string data {};
+  bool is_last {};
+  inline bool operator<( const block_node& t ) const
+  {
+    bool res = begin < t.begin;
+    return res;
+  }
+};
 class Reassembler
 {
 public:
@@ -28,7 +42,13 @@ public:
    * The Reassembler should close the stream after writing the last byte.
    */
   void insert( uint64_t first_index, std::string data, bool is_last_substring, Writer& output );
-
   // How many bytes are stored in the Reassembler itself?
   uint64_t bytes_pending() const;
+
+private:
+  std::set<block_node> blocks_ {};
+  uint64_t first_unassembled_index { 0 };
+  void push_substring(block_node&,uint64_t);
+  void merge(block_node&,std::set<block_node>::iterator);
+  // uint64_t first_unacceptable_index {};
 };

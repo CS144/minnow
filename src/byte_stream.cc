@@ -17,16 +17,14 @@ void Writer::push( string data )
   if ( data.empty() || available_capacity() == 0 ) {
     return;
   }
-  auto const topush=min(available_capacity(),data.length());
-  if(topush<data.length()){
-    data=data.substr(0,topush);
+  auto const topush = min( available_capacity(), data.length() );
+  if ( topush < data.length() ) {
+    data = data.substr( 0, topush );
   }
-  //const string s;
-  data_queue_.push_back(std::move(data));
-  data_view_.emplace_back(data_queue_.back().data(),topush);
-  bytes_pushed_+=topush;
+  data_queue_.push_back( std::move( data ) );
+  data_view_.emplace_back( data_queue_.back().data(), topush );
+  bytes_pushed_ += topush;
 }
-
 void Writer::close()
 {
   is_closed_ = true;
@@ -49,7 +47,7 @@ uint64_t Writer::bytes_pushed() const
 }
 string_view Reader::peek() const
 {
-  if(data_view_.empty()) { 
+  if ( data_view_.empty() ) {
     return {};
   }
   return data_view_.front();
@@ -70,30 +68,26 @@ void Reader::pop( uint64_t len )
   if ( is_finished() ) {
     return;
   }
-  if(len==0||data_view_.empty()){
+  if ( len == 0 || data_view_.empty() ) {
     return;
   }
-  auto topop=min(len,bytes_buffered());
-  //auto n = min( len, num_bytes_buffered_ );
+  auto topop = min( len, bytes_buffered() );
   while ( topop > 0 ) {
     auto sz = data_view_.front().length();
     if ( topop < sz ) {
       data_view_.front().remove_prefix( topop );
-      //num_bytes_buffered_ -= n;
       bytes_popped_ += topop;
       return;
     }
     data_view_.pop_front();
     data_queue_.pop_front();
     topop -= sz;
-    //num_bytes_buffered_ -= sz;
     bytes_popped_ += sz;
   }
-
-// 作者：haha
-// 链接：https://zhuanlan.zhihu.com/p/630739394
-// 来源：知乎
-// 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+  // 作者：haha
+  // 链接：https://zhuanlan.zhihu.com/p/630739394
+  // 来源：知乎
+  // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 }
 uint64_t Reader::bytes_buffered() const
 {

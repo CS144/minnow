@@ -12,14 +12,10 @@ protected:
   uint64_t capacity_;
   std::deque<std::string> data_queue_;
   std::deque<std::string_view> data_view_;
-  //std::deque<char> buf_;
   bool is_closed_ = false;
   bool has_error_ = false;
-  // uint64_t front_;
-  // uint64_t back_;
   uint64_t bytes_popped_ = 0;
   uint64_t bytes_pushed_ = 0;
-
 public:
   explicit ByteStream( uint64_t capacity );
   // Helper functions (provided) to access the ByteStream's Reader and Writer interfaces
@@ -31,8 +27,7 @@ public:
 class Writer : public ByteStream
 {
 public:
-  // void push( const std::string& data ); // Push data to stream, but only as much as available capacity allows.
-  void push( std::string data );
+  void push( std::string data );// Push data to stream, but only as much as available capacity allows.
   void close();           // Signal that the stream has reached its ending. Nothing more will be written.
   void set_error();       // Signal that the stream suffered an error.
   bool is_closed() const; // Has the stream been closed?
