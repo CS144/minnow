@@ -112,6 +112,61 @@ int main()
       test.execute( Tick { 1 }.with_max_retx_exceeded( true ) );
     }
 
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      const uint16_t retx_timeout = uniform_int_distribution<uint16_t> { 10, 10000 }( rd );
+      cfg.fixed_isn = isn;
+      cfg.rt_timeout = retx_timeout;
+
+      // test that lowest seqno is sent on consecutive resends
+      TCPSenderTestHarness test { "Retx after multiple sends, retx earliest packet", cfg };
+      // syn + syn/ack to increase window size
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( AckReceived { Wrap32 { isn + 1 } } );
+      test.execute( ExpectSeqnosInFlight { 0 } );
+
+      // packet A. Send
+      test.execute( Push { "A" } );
+      test.execute( ExpectMessage {}.with_payload_size( 1 ).with_seqno( isn + 1 ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      
+      // packet B. Queue.
+      test.execute( Push { "BB" } );
+      test.execute( ExpectSeqnosInFlight { 3 } );
+
+      // timeout to queue A. Should send packet A and B, order does not matter
+      test.execute( Tick { retx_timeout }.with_max_retx_exceeded( false ) );
+      test.execute( ExpectMessage {} ); // either A or B
+      test.execute( ExpectMessage {} ); // either A or B
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 3 } );
+      test.execute( ExpectConsecutiveRetransmissions { 1 } );
+
+      // timeout. Should send packet A
+      test.execute( Tick { (uint64_t)retx_timeout << 1 }.with_max_retx_exceeded( false ) );
+      test.execute( ExpectMessage {}.with_payload_size( 1 ).with_seqno( isn + 1 ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 3 } );
+      test.execute( ExpectConsecutiveRetransmissions { 2 } ); 
+
+      // continue communications as expected
+      test.execute( AckReceived { Wrap32 { isn + 1 + 1 } } ); // ack A
+      test.execute( ExpectSeqnosInFlight { 2 } );
+      test.execute( ExpectConsecutiveRetransmissions { 0 } ); // B is still outstanding
+      test.execute( Tick { (uint64_t)retx_timeout }.with_max_retx_exceeded( false ) ); 
+      test.execute( ExpectMessage {}.with_payload_size( 2 ).with_seqno( isn + 1 + 1 ) ); // packet B
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectConsecutiveRetransmissions { 1 } ); 
+      test.execute( AckReceived { Wrap32 { isn + 1 + 1 + 2 } } ); // ack B
+      test.execute( ExpectSeqnosInFlight { 0 } );
+      test.execute( ExpectNoSegment {} );
+    }
+
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
