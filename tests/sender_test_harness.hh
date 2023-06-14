@@ -54,6 +54,13 @@ struct ExpectSeqnosInFlight : public ExpectNumber<StreamAndSender, uint64_t>
   uint64_t value( StreamAndSender& ss ) const override { return ss.second.sequence_numbers_in_flight(); }
 };
 
+struct ExpectConsecutiveRetransmissions : public ExpectNumber<StreamAndSender, uint64_t>
+{
+  using ExpectNumber::ExpectNumber;
+  std::string name() const override { return "consecutive_retransmissions"; }
+  uint64_t value( StreamAndSender& ss ) const override { return ss.second.consecutive_retransmissions(); }
+};
+
 struct ExpectNoSegment : public Expectation<StreamAndSender>
 {
   std::string description() const override { return "nothing to send"; }
