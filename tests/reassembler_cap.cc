@@ -113,7 +113,7 @@ int main()
       
       test.execute( Insert { "bc", 1 }.is_last() );
       test.execute( BytesPushed( 3 ) );
-      test.execute( BytesPending( 1 ) );
+      test.execute( BytesPending( 0 ) );
 
       test.execute( ReadAll( "c" ) );
 
