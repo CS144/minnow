@@ -46,7 +46,7 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
   (void)msg;
 }
 
-void TCPSender::tick( const size_t ms_since_last_tick )
+void TCPSender::tick( uint64_t ms_since_last_tick )
 {
   // Your code here.
   (void)ms_since_last_tick;
