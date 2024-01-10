@@ -1,0 +1,40 @@
+#!/usr/bin/python
+
+import os
+import subprocess
+import re
+import sys
+
+base = sys.argv[1] if len(sys.argv) > 1 else '.'
+modules = [['byte_stream', 'ByteStream'],
+#           ['reassembler', 'Reassembler'],
+#           ['tcp_receiver', 'TCPReceiver'],
+#           ['wrapping_integers', 'Wrap32'],
+#           ['tcp_sender', 'TCPSender'],
+#           ['network_interface', 'NetworkInterface'],
+#           ['router', 'Router']
+           ]
+longest_module_length = max([len(x[1]) for x in modules])
+
+
+def count_lines(filename):
+    full_filename = base + '/src/' + filename
+    report = subprocess.run(['sloccount', full_filename], capture_output=True)
+    report.check_returncode()
+    loc = re.search(r'Total Physical Source Lines of Code \(SLOC\) * = (\d+)',
+                    report.stdout.decode('ascii'))
+    return int(loc.group(1))
+
+
+if os.environ.get('MAKE_TERMOUT'):
+    tty = open('/dev/tty', 'w')
+else:
+    tty = sys.stdout
+
+
+for i in modules:
+    x = count_lines(i[0] + '.hh')
+    y = count_lines(i[0] + '.cc')
+    spacing = longest_module_length - len(i[1])
+    tty.write('%s%s:%s%5d lines of code\n'
+              % (' ' * 13, i[1], ' ' * spacing, x + y))
