@@ -97,6 +97,17 @@ int main()
       test.execute( BytesBuffered { 1 } );
     }
 
+    {
+      ByteStreamTestHarness test { "bytes-popped-test", 2 };
+
+      test.execute( Push { "c" } );
+      test.execute( BytesPushed { 1 } );
+      test.execute( Pop { 2 } );
+      test.execute( IsClosed { false } );
+      test.execute( BufferEmpty { true } );
+      test.execute( BytesPopped { 1 } );
+    }
+
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
