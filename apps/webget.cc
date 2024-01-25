@@ -10,18 +10,18 @@ using namespace std;
 void get_URL( const string& host, const string& path )
 {
   TCPSocket skt;
-  skt.connect(Address(host,"http"));
-  skt.write("GET "+path+" HTTP/1.1\r\n");
-  skt.write("Host: "+host+"\r\n");
-  skt.write("Connection: close\r\n");
-  skt.write("\r\n");
-  string result,tmp;
-  while (!skt.eof()){
-    skt.read(tmp);
-    result+=tmp;
+  skt.connect( Address( host, "http" ) );
+  skt.write( "GET " + path + " HTTP/1.1\r\n" );
+  skt.write( "Host: " + host + "\r\n" );
+  skt.write( "Connection: close\r\n" );
+  skt.write( "\r\n" );
+  string result, tmp;
+  while ( !skt.eof() ) {
+    skt.read( tmp );
+    result += tmp;
   }
   skt.close();
-  cout<<result;
+  cout << result;
   cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   cerr << "Warning: get_URL() has not been implemented yet.\n";
 }
