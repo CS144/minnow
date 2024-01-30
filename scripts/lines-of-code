@@ -10,7 +10,7 @@ modules = [['byte_stream', 'ByteStream'],
            ['reassembler', 'Reassembler'],
            ['tcp_receiver', 'TCPReceiver'],
            ['wrapping_integers', 'Wrap32'],
-#           ['tcp_sender', 'TCPSender'],
+           ['tcp_sender', 'TCPSender'],
 #           ['network_interface', 'NetworkInterface'],
 #           ['router', 'Router']
            ]
