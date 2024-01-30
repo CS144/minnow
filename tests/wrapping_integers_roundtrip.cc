@@ -28,9 +28,9 @@ int main()
     auto rd = get_random_engine();
     uniform_int_distribution<uint32_t> dist31minus1 { 0, ( uint32_t { 1 } << 31 ) - 1 };
     uniform_int_distribution<uint32_t> dist32 { 0, numeric_limits<uint32_t>::max() };
-    uniform_int_distribution<uint64_t> dist63 { 0, uint64_t { 1 } << 63 };
-
     const uint64_t big_offset = ( uint64_t { 1 } << 31 ) - 1;
+    // credit: Ammar Ratnani
+    uniform_int_distribution<uint64_t> dist63 { big_offset, uint64_t { 1 } << 63 };
 
     for ( unsigned int i = 0; i < 1000000; i++ ) {
       const Wrap32 isn { dist32( rd ) };

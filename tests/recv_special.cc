@@ -199,6 +199,62 @@ int main()
       test.execute( SegmentArrives {}.with_seqno( rd() ).with_rst().without_ackno() );
       test.execute( HasError { true } );
     }
+
+    {
+      // test credit: Majd Nasra
+      ReassemblerTestHarness test { "segment already seen in full", 3 };
+
+      test.execute( Insert { "abc", 0 } );
+      test.execute( ReadAll( "abc" ) );
+      test.execute( BytesPushed( 3 ) );
+      test.execute( BytesPending( 0 ) );
+      test.execute( Insert { "ab", 0 } );
+      test.execute( ReadAll( "" ) ); // tests if the code double-pushes segments already seen in the stream.
+      test.execute( BytesPushed( 3 ) );
+      test.execute( BytesPending( 0 ) );
+    }
+
+    {
+      // Credit: Max Jardetzky
+      ReassemblerTestHarness test { "insert within capacity", 4 };
+
+      test.execute( Insert { "bc", 1 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 2 ) );
+
+      test.execute( Insert { "bcd", 1 } );
+      test.execute( BytesPending( 3 ) );
+      test.execute( Insert { "a", 0 } );
+      test.execute( ReadAll( "abcd" ) );
+      test.execute( BytesPushed( 4 ) );
+      test.execute( BytesPending( 0 ) );
+    }
+
+    // test credit: Tanmay Garg and Agam Mohan Singh Bhatia
+    {
+      ReassemblerTestHarness test { "insert last fully beyond capacity + empty string is last", 2 };
+
+      test.execute( Insert { "b", 1 } );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 1 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( BytesPushed( 2 ) );
+      test.execute( BytesPending( 0 ) );
+
+      test.execute( Insert { "c", 2 }.is_last() );
+      test.execute( IsFinished { false } );
+      test.execute( Insert { "abc", 0 }.is_last() );
+      test.execute( IsFinished { false } );
+      test.execute( Insert { "", 3 }.is_last() );
+      test.execute( IsFinished { false } );
+
+      test.execute( ReadAll( "ab" ) );
+      test.execute( Insert { "c", 2 }.is_last() );
+      test.execute( ReadAll( "c" ) );
+      test.execute( IsFinished { true } );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
