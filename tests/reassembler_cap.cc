@@ -120,6 +120,31 @@ int main()
 
       test.execute( IsFinished { true } );
     }
+
+    // test credit: Tanmay Garg and Agam Mohan Singh Bhatia
+    {
+      ReassemblerTestHarness test { "insert last fully beyond capacity + empty string is last", 2 };
+
+      test.execute( Insert { "b", 1 } );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 1 ) );
+
+      test.execute( Insert { "a", 0 } );
+      test.execute( BytesPushed( 2 ) );
+      test.execute( BytesPending( 0 ) );
+
+      test.execute( Insert { "c", 2 }.is_last() );
+      test.execute( IsFinished { false } );
+      test.execute( Insert { "abc", 0 }.is_last() );
+      test.execute( IsFinished { false } );
+      test.execute( Insert { "", 3 }.is_last() );
+      test.execute( IsFinished { false } );
+
+      test.execute( ReadAll( "ab" ) );
+      test.execute( Insert { "c", 2 }.is_last() );
+      test.execute( ReadAll( "c" ) );
+      test.execute( IsFinished { true } );
+    }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
