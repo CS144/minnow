@@ -120,6 +120,23 @@ int main()
 
       test.execute( IsFinished { true } );
     }
+
+    {
+      // Credit: Max Jardetzky
+      ReassemblerTestHarness test { "insert within capacity but exceed the negative space size", 4 };
+
+      test.execute( Insert { "bc", 1 } );
+      test.execute( ReadAll( "" ) );
+      test.execute( BytesPushed( 0 ) );
+      test.execute( BytesPending( 2 ) );
+
+      test.execute( Insert { "bcd", 1 } );
+      test.execute( BytesPending( 3 ) );
+      test.execute( Insert { "a", 0 } );
+      test.execute( ReadAll( "abcd" ) );
+      test.execute( BytesPushed( 4 ) );
+      test.execute( BytesPending( 0 ) );
+    }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
