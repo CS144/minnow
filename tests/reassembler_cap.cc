@@ -120,6 +120,21 @@ int main()
 
       test.execute( IsFinished { true } );
     }
+
+    {
+      ReassemblerTestHarness test { "ignore inserts after the last string is read", 100 };
+
+      test.execute( Insert { "woo", 0 }.is_last() );
+      test.execute( BytesPushed( 3 ) );
+      test.execute( BytesPending( 0 ) );
+      test.execute( ReadAll( "woo" ) );
+      test.execute( IsFinished { true } );
+      test.execute( Insert { "hoo", 3 } );
+      test.execute( BytesPushed( 3 ) );
+      test.execute( BytesPending( 0 ) );
+      test.execute( ReadAll( "" ) );
+    }
+    
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
