@@ -277,13 +277,13 @@ int main()
       // Credit: Tanmay Garg
       ReassemblerTestHarness test { "overlapping multiple unassembled sections 3", 30 };
 
-      test.execute( Insert { "world!", 21 } );
       test.execute( Insert { "hello", 15 } );
+      test.execute( Insert { "world!", 21 } );
       test.execute( Insert { "I am sentient", 0 } );
-      test.execute( Insert { "am sentient, hello world", 2 } );
+      test.execute( Insert { "sentient, hello world", 5 } );
 
-      test.execute( BytesPushed( 27 ) );
       test.execute( BytesPending( 0 ) );
+      test.execute( BytesPushed( 27 ) );
     }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
