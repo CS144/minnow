@@ -565,6 +565,28 @@ int main()
       test.execute( Receive { TCPReceiverMessage { .RST = true } } );
       test.execute( HasError { true } );
     }
+
+    // Newly added test: check RTO timer on invalid ackno
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+      cfg.rt_timeout = 10;
+      TCPSenderTestHarness test { "invalid ackno -> should not reset RTO timer", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( AckReceived { Wrap32 { isn + 1 } }.with_win( 4 ) );
+      test.execute( Push { "abcd" } );
+      test.execute( ExpectMessage {}.with_payload_size( 4 ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( Tick { 10 }.with_max_retx_exceeded( false ) ); // RTO timer should double here
+      test.execute( ExpectMessage {}.with_payload_size( 4 ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( AckReceived { Wrap32 { isn + 1000 } } ); // invalid ackno received here, should not reset
+      test.execute( Tick { 10 }.with_max_retx_exceeded( false ) ); // RTO timer should still be double
+      test.execute( ExpectNoSegment {} );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
