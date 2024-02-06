@@ -565,6 +565,36 @@ int main()
       test.execute( Receive { TCPReceiverMessage { .RST = true } } );
       test.execute( HasError { true } );
     }
+    // My extra tests: Ava Jih-Schiff
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "Receiving a window size before transmit I", cfg };
+      test.execute( AckReceived { Wrap32 { 0 } }.with_win( 3 ).without_push() ); // invalid ack but window is set
+      test.execute( ExpectNoSegment {} );
+      test.execute( Push { "abc" }.with_close() );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 2 ).with_seqno( isn ) );
+      test.execute( ExpectSeqno { isn + 3 } );
+      test.execute( ExpectSeqnosInFlight { 3 } );
+      test.execute( AckReceived { Wrap32 { isn + 3 } }.with_win( 1 ) );
+      test.execute( ExpectMessage {}.with_no_flags().with_payload_size( 1 ).with_seqno( isn + 3) ); 
+      test.execute( AckReceived { Wrap32 { isn + 4 } }.with_win( 1 ) );
+      test.execute( ExpectMessage {}.with_no_flags().with_fin( true ).with_payload_size( 0 ).with_seqno( isn + 4) ); 
+    }
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "Receiving a window size before transmit II", cfg };
+      test.execute( AckReceived { Wrap32 { 0 } }.with_win( 5 ).without_push() ); // invalid ack but window is set
+      test.execute( ExpectNoSegment {} );
+      test.execute( Push { "abc" }.with_close() );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_fin( true ).with_payload_size( 3 ).with_seqno( isn ) );
+      test.execute( ExpectSeqno { isn + 5 } ); 
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
