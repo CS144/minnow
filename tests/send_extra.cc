@@ -572,7 +572,7 @@ int main()
       cfg.isn = isn;
 
       TCPSenderTestHarness test { "Receiving a window size before transmit I", cfg };
-      test.execute( AckReceived { Wrap32 { 0 } }.with_win( 3 ).without_push() ); // invalid ack but window is set
+      test.execute( AckReceived { Wrap32 { cfg.isn } }.with_win( 3 ).without_push() ); // invalid ack but window is set
       test.execute( ExpectNoSegment {} );
       test.execute( Push { "abc" }.with_close() );
       test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 2 ).with_seqno( isn ) );
@@ -589,7 +589,7 @@ int main()
       cfg.isn = isn;
 
       TCPSenderTestHarness test { "Receiving a window size before transmit II", cfg };
-      test.execute( AckReceived { Wrap32 { 0 } }.with_win( 5 ).without_push() ); // invalid ack but window is set
+      test.execute( AckReceived { Wrap32 { cfg.isn } }.with_win( 5 ).without_push() ); // invalid ack but window is set
       test.execute( ExpectNoSegment {} );
       test.execute( Push { "abc" }.with_close() );
       test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_fin( true ).with_payload_size( 3 ).with_seqno( isn ) );
