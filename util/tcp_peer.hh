@@ -42,7 +42,7 @@ public:
     const bool sender_active = sender_.sequence_numbers_in_flight() or not sender_.reader().is_finished();
     const bool receiver_active = not receiver_.writer().is_closed();
     const bool lingering
-      = linger_after_streams_finish_ and ( cumulative_time_ > time_of_last_receipt_ + 10UL * cfg_.rt_timeout );
+      = linger_after_streams_finish_ and ( cumulative_time_ < time_of_last_receipt_ + 10UL * cfg_.rt_timeout );
 
     return ( not any_errors ) and ( sender_active or receiver_active or lingering );
   }
