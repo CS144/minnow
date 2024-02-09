@@ -565,6 +565,38 @@ int main()
       test.execute( Receive { TCPReceiverMessage { .RST = true } } );
       test.execute( HasError { true } );
     }
+
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+      cfg.rt_timeout = 1u;
+
+      TCPSenderTestHarness test { "Stream Error -> Tick Doesn't ReTX", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ) );
+      test.execute( SetError {} );
+      test.execute( HasError { true } );
+      test.execute( Tick { 10ul * cfg.rt_timeout }.with_max_retx_exceeded( false ) );
+      test.execute( HasError { true } );
+      test.execute( ExpectNoSegment {} );
+    }
+
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+      cfg.rt_timeout = 1u;
+
+      TCPSenderTestHarness test { "Reset Packet -> Tick Doesn't ReTX", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ) );
+      test.execute( Receive { TCPReceiverMessage { .RST = true } }.without_push() );
+      test.execute( HasError { true } );
+      test.execute( Tick { 10ul * cfg.rt_timeout }.with_max_retx_exceeded( false ) );
+      test.execute( HasError { true } );
+      test.execute( ExpectNoSegment {} );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
