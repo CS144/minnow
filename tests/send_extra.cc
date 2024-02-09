@@ -565,6 +565,45 @@ int main()
       test.execute( Receive { TCPReceiverMessage { .RST = true } } );
       test.execute( HasError { true } );
     }
+
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      const size_t rto = uniform_int_distribution<uint16_t> { 30, 10000 }( rd );
+      cfg.isn = isn;
+      cfg.rt_timeout = rto;
+
+      TCPSenderTestHarness test { "When queue is empty, timer is stopped, and tick calls are ignored", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqno { isn + 1 } );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( AckReceived { Wrap32 { isn + 1 } } );
+      test.execute( Tick { rto - 1 } );
+      test.execute( Push( "abc" ) );
+      test.execute( ExpectMessage {}.with_data( "abc" ) );
+      test.execute( Tick { rto - 1 } );
+      test.execute( ExpectNoSegment {} );
+      test.execute( Tick { 1 } );
+      test.execute (ExpectMessage {}.with_data( "abc" ) );
+    }
+
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "Update window size if NO ACK.", cfg };
+      test.execute( Receive { { {}, 1024 } }.without_push() );
+      test.execute( Push( "01234567" ).with_close() );
+      test.execute( ExpectMessage {}.with_data( "01234567" ).with_syn( true ).with_seqno( isn ).with_fin( true ) );
+      test.execute( ExpectSeqno { isn + 10 } );
+      test.execute( ExpectSeqnosInFlight { 10 } );
+      test.execute( ExpectNoSegment {} );
+      test.execute( HasError { false } );
+    }
+    
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
