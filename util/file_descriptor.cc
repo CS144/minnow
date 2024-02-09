@@ -83,13 +83,13 @@ FileDescriptor FileDescriptor::duplicate() const
 void FileDescriptor::read( string& buffer )
 {
   if ( buffer.empty() ) {
-    buffer.clear();
     buffer.resize( kReadBufferSize );
   }
 
   const ssize_t bytes_read = ::read( fd_num(), buffer.data(), buffer.size() );
   if ( bytes_read < 0 ) {
     if ( internal_fd_->non_blocking_ and ( errno == EAGAIN or errno == EINPROGRESS ) ) {
+      buffer.clear();
       return;
     }
     throw unix_error { "read" };
@@ -128,6 +128,7 @@ void FileDescriptor::read( vector<string>& buffers )
   const ssize_t bytes_read = ::readv( fd_num(), iovecs.data(), static_cast<int>( iovecs.size() ) );
   if ( bytes_read < 0 ) {
     if ( internal_fd_->non_blocking_ and ( errno == EAGAIN or errno == EINPROGRESS ) ) {
+      buffers.clear();
       return;
     }
     throw unix_error { "read" };
