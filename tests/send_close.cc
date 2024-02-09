@@ -53,6 +53,27 @@ int main()
       test.execute( ExpectNoSegment {} );
     }
 
+    // this case is similar to SYN + FIN but test explicitly checks if your implementation correctly updates the
+    // window size upon receiving a window update from the receiver, even before any acknowledgment has been
+    // received. It helps to catch issues where the sender might incorrectly assume a window size = 0 if the recieve
+    // function is only updating window size when recieving acknowledgments.
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "Window size set before receiving first acknowledgment", cfg };
+      //  Set window size without having sent an acknowledgment
+      test.execute( Receive { { {}, 1024 } }.without_push() );
+      test.execute( ExpectNoSegment {} );
+      // Close the stream, expecting that SYN and FIN can be sent together if window size allows
+      test.execute( Close {} );
+      // Ensure sender can send SYN and FIN flags without having received any acknowledgments
+      // must have set window size earlier
+      test.execute( ExpectMessage {}.with_syn( true ).with_fin( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+    }
+
     {
       TCPConfig cfg;
       const Wrap32 isn( rd() );
