@@ -1,0 +1,2 @@
+/usr/bin/ar qc libminnow_debug.a CMakeFiles/minnow_debug.dir/byte_stream.o CMakeFiles/minnow_debug.dir/byte_stream_helpers.o CMakeFiles/minnow_debug.dir/reassembler.o
+/usr/bin/ranlib libminnow_debug.a

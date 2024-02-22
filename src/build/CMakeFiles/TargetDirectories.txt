@@ -1,0 +1,5 @@
+/home/ljz/Desktop/144/minnow/src/build/CMakeFiles/minnow_debug.dir
+/home/ljz/Desktop/144/minnow/src/build/CMakeFiles/minnow_sanitized.dir
+/home/ljz/Desktop/144/minnow/src/build/CMakeFiles/minnow_optimized.dir
+/home/ljz/Desktop/144/minnow/src/build/CMakeFiles/edit_cache.dir
+/home/ljz/Desktop/144/minnow/src/build/CMakeFiles/rebuild_cache.dir
