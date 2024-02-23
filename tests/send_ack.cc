@@ -71,6 +71,25 @@ int main()
       test.execute( ExpectSeqnosInFlight { 1 } );
       test.execute( HasError { false } );
     }
+
+    // test credit: Ammar Ratnani
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "A partially acknowledged segment is still fully in flight", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( AckReceived { Wrap32 { isn + 1 } }.with_win( 1024 ) );
+      test.execute( ExpectSeqnosInFlight { 0 } );
+      test.execute( Push { "ab" } );
+      test.execute( ExpectMessage {}.with_no_flags().with_payload_size( 2 ).with_seqno( isn + 1 ) );
+      test.execute( ExpectSeqnosInFlight { 2 } );
+      test.execute( AckReceived { Wrap32 { isn + 2 } }.with_win( 1000 ) );
+      test.execute( ExpectSeqnosInFlight { 2 } );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;

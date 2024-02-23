@@ -168,6 +168,38 @@ int main()
       test.execute( ExpectSeqnosInFlight { 0 } );
       test.execute( ExpectNoSegment {} );
     }
+
+    // test credit: Kosthi
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      const uint16_t retx_timeout = uniform_int_distribution<uint16_t> { 10, 10000 }( rd );
+      cfg.isn = isn;
+      cfg.rt_timeout = retx_timeout;
+
+      TCPSenderTestHarness test { "timer correctness", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( AckReceived { Wrap32 { isn + 1 } } );
+      test.execute( ExpectSeqnosInFlight { 0 } );
+      test.execute( Tick( retx_timeout ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 0 } );
+      test.execute( Push { "a" } );
+      test.execute( ExpectMessage {}.with_no_flags().with_data( "a" ) );
+      test.execute( Tick( 1 ) ); // no timeout, no msg send
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( Tick( retx_timeout - 1U ) );
+      test.execute( ExpectMessage {}.with_no_flags().with_data( "a" ) );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( AckReceived { Wrap32 { isn + 2 } } );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqnosInFlight { 0 } );
+      test.execute( HasError { false } );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;

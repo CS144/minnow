@@ -272,6 +272,20 @@ int main()
       test.execute( BytesPushed( 5 ) );
       test.execute( BytesPending( 0 ) );
     }
+
+    {
+      // Credit: Tanmay Garg
+      ReassemblerTestHarness test { "overlapping multiple unassembled sections 3", 30 };
+
+      test.execute( Insert { "hello", 15 } );
+      test.execute( Insert { "world!", 21 } );
+      test.execute( Insert { "I am sentient", 0 } );
+      test.execute( Insert { "sentient, hello world", 5 } );
+
+      test.execute( BytesPending( 0 ) );
+      test.execute( BytesPushed( 27 ) );
+      test.execute( ReadAll( "I am sentient, hello world!" ) );
+    }
   } catch ( const exception& e ) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;

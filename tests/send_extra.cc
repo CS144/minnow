@@ -565,6 +565,104 @@ int main()
       test.execute( Receive { TCPReceiverMessage { .RST = true } } );
       test.execute( HasError { true } );
     }
+
+    // Newly added test: check RTO timer on invalid ackno
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+      cfg.rt_timeout = 10;
+      TCPSenderTestHarness test { "invalid ackno -> should not reset RTO timer", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( AckReceived { Wrap32 { isn + 1 } }.with_win( 4 ) );
+      test.execute( Push { "abcd" } );
+      test.execute( ExpectMessage {}.with_payload_size( 4 ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( Tick { 10 }.with_max_retx_exceeded( false ) ); // RTO timer should double here
+      test.execute( ExpectMessage {}.with_payload_size( 4 ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( AckReceived { Wrap32 { isn + 1000 } } );       // invalid ackno received here, should not reset
+      test.execute( Tick { 10 }.with_max_retx_exceeded( false ) ); // RTO timer should still be double
+      test.execute( ExpectNoSegment {} );
+    }
+
+    // test credit: Ava Jih-Schiff
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "Receiving before transmit I", cfg };
+      test.execute(
+        AckReceived { Wrap32 { cfg.isn } }.with_win( 3 ).without_push() ); // invalid ack but window is set
+      test.execute( ExpectNoSegment {} );
+      test.execute( Push { "abc" }.with_close() );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 2 ).with_seqno( isn ) );
+      test.execute( ExpectSeqno { isn + 3 } );
+      test.execute( ExpectSeqnosInFlight { 3 } );
+      test.execute( AckReceived { Wrap32 { isn + 3 } }.with_win( 1 ) );
+      test.execute( ExpectMessage {}.with_no_flags().with_payload_size( 1 ).with_seqno( isn + 3 ) );
+      test.execute( AckReceived { Wrap32 { isn + 4 } }.with_win( 1 ) );
+      test.execute(
+        ExpectMessage {}.with_no_flags().with_fin( true ).with_payload_size( 0 ).with_seqno( isn + 4 ) );
+    }
+
+    // test credit: Majd Nasra
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      const size_t rto = uniform_int_distribution<uint16_t> { 30, 10000 }( rd );
+      cfg.isn = isn;
+      cfg.rt_timeout = rto;
+
+      TCPSenderTestHarness test { "When queue is empty, timer is stopped", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+      test.execute( ExpectSeqno { isn + 1 } );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( AckReceived { Wrap32 { isn + 1 } } );
+      test.execute( Tick { rto - 1 } );
+      test.execute( Push( "abc" ) );
+      test.execute( ExpectMessage {}.with_data( "abc" ) );
+      test.execute( Tick { rto - 1 } );
+      test.execute( ExpectNoSegment {} );
+      test.execute( Tick { 1 } );
+      test.execute( ExpectMessage {}.with_data( "abc" ) );
+    }
+
+    // test credit: Majd Nasra
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "Receiving before transmit II", cfg };
+      test.execute( Receive { { {}, 1024 } }.without_push() );
+      test.execute( Push( "01234567" ).with_close() );
+      test.execute( ExpectMessage {}.with_data( "01234567" ).with_syn( true ).with_seqno( isn ).with_fin( true ) );
+      test.execute( ExpectSeqno { isn + 10 } );
+      test.execute( ExpectSeqnosInFlight { 10 } );
+      test.execute( ExpectNoSegment {} );
+      test.execute( HasError { false } );
+    }
+
+    // test credit: Sasha Moore
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+
+      TCPSenderTestHarness test { "Receiving before transmit III", cfg };
+      //  Set window size without having sent an acknowledgment
+      test.execute( Receive { { {}, 1024 } }.without_push() );
+      test.execute( ExpectNoSegment {} );
+      test.execute( Close {} );
+      test.execute( ExpectMessage {}.with_syn( true ).with_fin( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectNoSegment {} );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
