@@ -190,6 +190,7 @@ int main()
       const auto datagram2 = make_datagram( "5.6.7.8", "13.12.11.11" );
       const auto datagram3 = make_datagram( "5.6.7.8", "13.12.11.12" );
       const auto datagram4 = make_datagram( "5.6.7.8", "13.12.11.13" );
+      const auto datagram5 = make_datagram( "5.6.7.8", "13.12.11.14" );
 
       test.execute( SendDatagram { datagram, Address( "192.168.0.1", 0 ) } );
       test.execute( ExpectFrame { make_frame(
@@ -234,6 +235,11 @@ int main()
         serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "4.3.2.1", {}, "192.168.0.1" ) ) ) } );
       test.execute( ExpectNoFrame {} );
 
+      // should not generate ARP because it hasn't been 5 seconds
+      test.execute( Tick { 4900 } );
+      test.execute( SendDatagram { datagram5, Address( "192.168.0.1", 0 ) } );
+      test.execute( ExpectNoFrame {} );
+
       // ARP reply again
       const EthernetAddress new_target_eth = random_private_ethernet_address();
       test.execute( ReceiveFrame {
@@ -245,6 +251,8 @@ int main()
         {} } );
       test.execute( ExpectFrame {
         make_frame( local_eth, new_target_eth, EthernetHeader::TYPE_IPv4, serialize( datagram4 ) ) } );
+      test.execute( ExpectFrame {
+        make_frame( local_eth, new_target_eth, EthernetHeader::TYPE_IPv4, serialize( datagram5 ) ) } );
       test.execute( ExpectNoFrame {} );
     }
 
