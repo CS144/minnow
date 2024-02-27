@@ -320,6 +320,59 @@ int main()
         serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "10.0.0.1", {}, "10.0.0.5" ) ) ) } );
       test.execute( ExpectNoFrame {} );
     }
+
+    {
+      const EthernetAddress local_eth = random_private_ethernet_address();
+      const EthernetAddress target_eth1 = random_private_ethernet_address();
+      const EthernetAddress target_eth2 = random_private_ethernet_address();
+
+      NetworkInterfaceTestHarness test { "pending datagrams sent to correct dst when ARP replies out of order", local_eth, Address( "4.3.2.1", 0 ) };
+
+      const auto datagram1 = make_datagram( "5.6.7.8", "13.12.11.10" );
+      const auto datagram2 = make_datagram( "5.6.7.8", "13.12.11.11" );
+
+      // Try to send datagram1, but we don't know target_eth1 yet, so send ARP request to get it
+      test.execute( SendDatagram { datagram1, Address( "192.168.0.1", 0 ) } );
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        ETHERNET_BROADCAST,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "4.3.2.1", {}, "192.168.0.1" ) ) ) } );
+
+      // Try to send datagram2, but we don't know target_eth2 yet, so send ARP request to get it
+      test.execute( SendDatagram { datagram2, Address( "192.168.0.2", 0 ) } );
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        ETHERNET_BROADCAST,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "4.3.2.1", {}, "192.168.0.2" ) ) ) } );
+
+      // Receive ARP reply from target_eth2 first, make sure we send datagram2, not datagram1
+      test.execute( ReceiveFrame {
+        make_frame(
+          target_eth2,
+          local_eth,
+          EthernetHeader::TYPE_ARP, // NOLINTNEXTLINE(*-suspicious-*)
+          serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth2, "192.168.0.2", local_eth, "4.3.2.1" ) ) ),
+        {} } );
+      test.execute(
+        ExpectFrame { make_frame( local_eth, target_eth2, EthernetHeader::TYPE_IPv4, serialize( datagram2 ) ) } );
+      test.execute( ExpectNoFrame {} );
+
+      // Receive ARP reply from target_eth1 next, make sure we send datagram1
+      test.execute( ReceiveFrame {
+        make_frame(
+          target_eth1,
+          local_eth,
+          EthernetHeader::TYPE_ARP, // NOLINTNEXTLINE(*-suspicious-*)
+          serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth1, "192.168.0.1", local_eth, "4.3.2.1" ) ) ),
+        {} } );
+      test.execute(
+        ExpectFrame { make_frame( local_eth, target_eth1, EthernetHeader::TYPE_IPv4, serialize( datagram1 ) ) } );
+      test.execute( ExpectNoFrame {} );
+
+    }
+
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return EXIT_FAILURE;
