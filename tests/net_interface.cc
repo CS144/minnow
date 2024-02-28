@@ -320,6 +320,49 @@ int main()
         serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "10.0.0.1", {}, "10.0.0.5" ) ) ) } );
       test.execute( ExpectNoFrame {} );
     }
+
+
+    {
+      const EthernetAddress local_eth = random_private_ethernet_address();
+      const EthernetAddress target_eth = random_private_ethernet_address();
+
+      NetworkInterfaceTestHarness test { "multiple pending datagrams all sent when ethernet address received", local_eth, Address( "4.3.2.1", 0 ) };
+
+      const auto datagram1 = make_datagram( "5.6.7.8", "13.12.11.10" );
+      const auto datagram2 = make_datagram( "5.6.7.8", "13.12.11.11" );
+      const auto datagram3 = make_datagram( "5.6.7.8", "13.12.11.12" );
+
+      // Try to send all datagrams, but we don't know target_eth yet, so should send ARP request to get it
+      test.execute( SendDatagram { datagram1, Address( "192.168.0.1", 0 ) } );
+      test.execute( SendDatagram { datagram2, Address( "192.168.0.1", 0 ) } );
+      test.execute( SendDatagram { datagram3, Address( "192.168.0.1", 0 ) } );
+
+      // Should have sent an ARP request to get target_eth
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        ETHERNET_BROADCAST,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "4.3.2.1", {}, "192.168.0.1" ) ) ) } );
+      test.execute( ExpectNoFrame {} );
+
+      // Receive ARP reply from target_eth next, and make sure we respond by sending all datagrams
+      test.execute( ReceiveFrame {
+        make_frame(
+          target_eth,
+          local_eth,
+          EthernetHeader::TYPE_ARP, // NOLINTNEXTLINE(*-suspicious-*)
+          serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth, "192.168.0.1", local_eth, "4.3.2.1" ) ) ),
+        {} } );
+      test.execute(
+        ExpectFrame { make_frame( local_eth, target_eth, EthernetHeader::TYPE_IPv4, serialize( datagram1 ) ) } );
+      test.execute(
+        ExpectFrame { make_frame( local_eth, target_eth, EthernetHeader::TYPE_IPv4, serialize( datagram2 ) ) } );
+      test.execute(
+        ExpectFrame { make_frame( local_eth, target_eth, EthernetHeader::TYPE_IPv4, serialize( datagram3 ) ) } );
+      test.execute( ExpectNoFrame {} );
+
+    }
+
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return EXIT_FAILURE;
