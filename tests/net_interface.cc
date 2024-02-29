@@ -320,6 +320,72 @@ int main()
         serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "10.0.0.1", {}, "10.0.0.5" ) ) ) } );
       test.execute( ExpectNoFrame {} );
     }
+
+    {
+      const EthernetAddress local_eth = random_private_ethernet_address();
+      const EthernetAddress remote_eth = random_private_ethernet_address();
+      const auto datagram1 = make_datagram( "5.6.7.8", "13.12.11.10" );
+      const auto datagram2 = make_datagram( "5.6.7.8", "13.12.11.11" );
+
+      NetworkInterfaceTestHarness test {
+        "update timestamp for ARP mapping if in map already", local_eth, Address( "100.5.100.5", 0 ) };
+
+      // receive ARP request
+      test.execute( ReceiveFrame {
+        make_frame( remote_eth,
+                    ETHERNET_BROADCAST,
+                    EthernetHeader::TYPE_ARP,
+                    serialize( make_arp( ARPMessage::OPCODE_REQUEST, remote_eth, "144.144.144.144", {}, "100.5.100.5" ) ) ),
+        {} } );
+      
+      // send ARP reply which does not reach destination
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        remote_eth,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REPLY, local_eth, "100.5.100.5", remote_eth, "144.144.144.144" ) ) ) } );
+      test.execute( ExpectNoFrame {} );
+
+      // just more than 5 seconds pass
+      test.execute( Tick { 5001 } );
+
+      // receive same ARP request and update mapping timestamp
+      test.execute( ReceiveFrame {
+        make_frame( remote_eth,
+                    ETHERNET_BROADCAST,
+                    EthernetHeader::TYPE_ARP,
+                    serialize( make_arp( ARPMessage::OPCODE_REQUEST, remote_eth, "144.144.144.144", {}, "100.5.100.5" ) ) ),
+        {} } );
+
+      // send same arp reply again
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        remote_eth,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REPLY, local_eth, "100.5.100.5", remote_eth, "144.144.144.144" ) ) ) } );
+      test.execute( ExpectNoFrame {} );
+
+      // 25 seconds pass
+      test.execute( Tick { 25000 } );
+      
+      // expect mapping to not be expired (25 sec since updated timestamp)
+      test.execute( SendDatagram { datagram1, Address( "144.144.144.144", 0 ) } );
+      test.execute(
+        ExpectFrame { make_frame( local_eth, remote_eth, EthernetHeader::TYPE_IPv4, serialize( datagram1 ) ) } );
+      test.execute( ExpectNoFrame {} );
+
+      // just more than 5 seconds pass
+      test.execute( Tick { 5001 } );
+
+      // expect mapping to be expired now (30.001 sec since updated timestamp)
+      test.execute( SendDatagram { datagram2, Address( "144.144.144.144", 0 ) } );
+      test.execute( ExpectFrame { make_frame(
+        local_eth,
+        ETHERNET_BROADCAST,
+        EthernetHeader::TYPE_ARP,
+        serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "100.5.100.5", {}, "144.144.144.144" ) ) ) } );
+      test.execute( ExpectNoFrame {} );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return EXIT_FAILURE;
