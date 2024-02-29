@@ -72,6 +72,8 @@ int main()
       test.execute( HasError { false } );
     }
 
+    // disable controversial test for 2024
+#if 0
     // test credit: Ammar Ratnani
     {
       TCPConfig cfg;
@@ -90,6 +92,7 @@ int main()
       test.execute( AckReceived { Wrap32 { isn + 2 } }.with_win( 1000 ) );
       test.execute( ExpectSeqnosInFlight { 2 } );
     }
+#endif
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
