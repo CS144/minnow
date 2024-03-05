@@ -73,3 +73,4 @@ add_test_exec(router)
 
 add_speed_test(byte_stream_speed_test)
 add_speed_test(reassembler_speed_test)
+add_speed_test(router_speed_test)
