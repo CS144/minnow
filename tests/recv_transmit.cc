@@ -79,6 +79,28 @@ int main()
       }
     }
 
+    // More than 2^16 bytes sent in sets of 1000
+    {
+      TCPReceiverTestHarness test { "proper wrapping when sending more than 2^16 bytes", 4000 };
+      const uint32_t block_size = 1000;
+      const uint32_t n_rounds = 1000;
+      const uint32_t isn = 0;
+      size_t bytes_sent = 0;
+      test.execute( SegmentArrives {}.with_syn().with_seqno( isn ) );
+      for ( uint32_t i = 0; i < n_rounds; ++i ) {
+        string data;
+        for ( uint32_t j = 0; j < block_size; ++j ) {
+          const uint8_t c = 'a' + ( ( i + j ) % 26 );
+          data.push_back( static_cast<char>( c ) );
+        }
+        test.execute( ExpectAckno { make_optional<Wrap32>( isn + bytes_sent + 1 ) } );
+        test.execute( BytesPushed { bytes_sent } );
+        test.execute( SegmentArrives {}.with_seqno( isn + bytes_sent + 1 ).with_data( data ) );
+        bytes_sent += block_size;
+        test.execute( ReadAll { std::move( data ) } );
+      }
+    }
+
     // Many arrives, one read
     {
       const uint64_t max_block_size = 10;
