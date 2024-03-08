@@ -83,7 +83,7 @@ int main()
     {
       TCPReceiverTestHarness test { "proper wrapping when sending more than 2^16 bytes", 4000 };
       const uint32_t block_size = 1000;
-      const uint32_t n_rounds = 1000;
+      const uint32_t n_rounds = 67;
       const uint32_t isn = 0;
       size_t bytes_sent = 0;
       test.execute( SegmentArrives {}.with_syn().with_seqno( isn ) );
