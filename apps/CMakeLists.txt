@@ -1,6 +1,16 @@
 add_library (stream_copy STATIC bidirectional_stream_copy.cc)
 
+add_library(stream_sanitized EXCLUDE_FROM_ALL STATIC bidirectional_stream_copy.cc)
+target_compile_options(stream_sanitized PUBLIC ${SANITIZING_FLAGS})
+
 macro(add_app exec_name)
+  add_executable("${exec_name}_sanitized" "${exec_name}.cc")
+  target_compile_options("${exec_name}_sanitized" PUBLIC ${SANITIZING_FLAGS})
+  target_link_options("${exec_name}_sanitized" PUBLIC ${SANITIZING_FLAGS})
+  target_link_libraries("${exec_name}_sanitized" stream_sanitized)
+  target_link_libraries("${exec_name}_sanitized" minnow_sanitized)
+  target_link_libraries("${exec_name}_sanitized" util_sanitized)
+
   add_executable("${exec_name}" "${exec_name}.cc")
   target_link_libraries("${exec_name}" stream_copy)
   target_link_libraries("${exec_name}" minnow_debug)
