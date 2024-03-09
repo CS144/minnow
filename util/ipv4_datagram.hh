@@ -16,7 +16,15 @@ struct IPv4Datagram
   void parse( Parser& parser )
   {
     header.parse( parser );
-    parser.all_remaining( payload );
+
+    // The Ethernet frame can have padding on the end. We must ignore it by only
+    // taking the number of bytes specified in the header.
+    //
+    // TODO: Efficiency. There's no need to concatenate all the remaining
+    // elements of the `vector`, as long as we take only the first `N`. This
+    // would save a a few copies.
+    payload.emplace_back( header.payload_length(), '\x00' );
+    parser.string( payload.back() );
   }
 
   void serialize( Serializer& serializer ) const
