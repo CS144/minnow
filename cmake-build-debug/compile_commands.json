@@ -1,0 +1,272 @@
+[
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o util/CMakeFiles/util_debug.dir/address.cc.o -c /home/cs144/minnow/util/address.cc",
+  "file": "/home/cs144/minnow/util/address.cc",
+  "output": "util/CMakeFiles/util_debug.dir/address.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o util/CMakeFiles/util_debug.dir/eventloop.cc.o -c /home/cs144/minnow/util/eventloop.cc",
+  "file": "/home/cs144/minnow/util/eventloop.cc",
+  "output": "util/CMakeFiles/util_debug.dir/eventloop.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o util/CMakeFiles/util_debug.dir/file_descriptor.cc.o -c /home/cs144/minnow/util/file_descriptor.cc",
+  "file": "/home/cs144/minnow/util/file_descriptor.cc",
+  "output": "util/CMakeFiles/util_debug.dir/file_descriptor.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o util/CMakeFiles/util_debug.dir/ipv4_header.cc.o -c /home/cs144/minnow/util/ipv4_header.cc",
+  "file": "/home/cs144/minnow/util/ipv4_header.cc",
+  "output": "util/CMakeFiles/util_debug.dir/ipv4_header.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o util/CMakeFiles/util_debug.dir/random.cc.o -c /home/cs144/minnow/util/random.cc",
+  "file": "/home/cs144/minnow/util/random.cc",
+  "output": "util/CMakeFiles/util_debug.dir/random.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o util/CMakeFiles/util_debug.dir/socket.cc.o -c /home/cs144/minnow/util/socket.cc",
+  "file": "/home/cs144/minnow/util/socket.cc",
+  "output": "util/CMakeFiles/util_debug.dir/socket.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o util/CMakeFiles/util_debug.dir/tun.cc.o -c /home/cs144/minnow/util/tun.cc",
+  "file": "/home/cs144/minnow/util/tun.cc",
+  "output": "util/CMakeFiles/util_debug.dir/tun.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o util/CMakeFiles/util_sanitized.dir/address.cc.o -c /home/cs144/minnow/util/address.cc",
+  "file": "/home/cs144/minnow/util/address.cc",
+  "output": "util/CMakeFiles/util_sanitized.dir/address.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o util/CMakeFiles/util_sanitized.dir/eventloop.cc.o -c /home/cs144/minnow/util/eventloop.cc",
+  "file": "/home/cs144/minnow/util/eventloop.cc",
+  "output": "util/CMakeFiles/util_sanitized.dir/eventloop.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o util/CMakeFiles/util_sanitized.dir/file_descriptor.cc.o -c /home/cs144/minnow/util/file_descriptor.cc",
+  "file": "/home/cs144/minnow/util/file_descriptor.cc",
+  "output": "util/CMakeFiles/util_sanitized.dir/file_descriptor.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o util/CMakeFiles/util_sanitized.dir/ipv4_header.cc.o -c /home/cs144/minnow/util/ipv4_header.cc",
+  "file": "/home/cs144/minnow/util/ipv4_header.cc",
+  "output": "util/CMakeFiles/util_sanitized.dir/ipv4_header.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o util/CMakeFiles/util_sanitized.dir/random.cc.o -c /home/cs144/minnow/util/random.cc",
+  "file": "/home/cs144/minnow/util/random.cc",
+  "output": "util/CMakeFiles/util_sanitized.dir/random.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o util/CMakeFiles/util_sanitized.dir/socket.cc.o -c /home/cs144/minnow/util/socket.cc",
+  "file": "/home/cs144/minnow/util/socket.cc",
+  "output": "util/CMakeFiles/util_sanitized.dir/socket.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o util/CMakeFiles/util_sanitized.dir/tun.cc.o -c /home/cs144/minnow/util/tun.cc",
+  "file": "/home/cs144/minnow/util/tun.cc",
+  "output": "util/CMakeFiles/util_sanitized.dir/tun.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o util/CMakeFiles/util_optimized.dir/address.cc.o -c /home/cs144/minnow/util/address.cc",
+  "file": "/home/cs144/minnow/util/address.cc",
+  "output": "util/CMakeFiles/util_optimized.dir/address.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o util/CMakeFiles/util_optimized.dir/eventloop.cc.o -c /home/cs144/minnow/util/eventloop.cc",
+  "file": "/home/cs144/minnow/util/eventloop.cc",
+  "output": "util/CMakeFiles/util_optimized.dir/eventloop.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o util/CMakeFiles/util_optimized.dir/file_descriptor.cc.o -c /home/cs144/minnow/util/file_descriptor.cc",
+  "file": "/home/cs144/minnow/util/file_descriptor.cc",
+  "output": "util/CMakeFiles/util_optimized.dir/file_descriptor.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o util/CMakeFiles/util_optimized.dir/ipv4_header.cc.o -c /home/cs144/minnow/util/ipv4_header.cc",
+  "file": "/home/cs144/minnow/util/ipv4_header.cc",
+  "output": "util/CMakeFiles/util_optimized.dir/ipv4_header.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o util/CMakeFiles/util_optimized.dir/random.cc.o -c /home/cs144/minnow/util/random.cc",
+  "file": "/home/cs144/minnow/util/random.cc",
+  "output": "util/CMakeFiles/util_optimized.dir/random.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o util/CMakeFiles/util_optimized.dir/socket.cc.o -c /home/cs144/minnow/util/socket.cc",
+  "file": "/home/cs144/minnow/util/socket.cc",
+  "output": "util/CMakeFiles/util_optimized.dir/socket.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o util/CMakeFiles/util_optimized.dir/tun.cc.o -c /home/cs144/minnow/util/tun.cc",
+  "file": "/home/cs144/minnow/util/tun.cc",
+  "output": "util/CMakeFiles/util_optimized.dir/tun.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o src/CMakeFiles/minnow_debug.dir/byte_stream.cc.o -c /home/cs144/minnow/src/byte_stream.cc",
+  "file": "/home/cs144/minnow/src/byte_stream.cc",
+  "output": "src/CMakeFiles/minnow_debug.dir/byte_stream.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o src/CMakeFiles/minnow_debug.dir/byte_stream_helpers.cc.o -c /home/cs144/minnow/src/byte_stream_helpers.cc",
+  "file": "/home/cs144/minnow/src/byte_stream_helpers.cc",
+  "output": "src/CMakeFiles/minnow_debug.dir/byte_stream_helpers.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o src/CMakeFiles/minnow_sanitized.dir/byte_stream.cc.o -c /home/cs144/minnow/src/byte_stream.cc",
+  "file": "/home/cs144/minnow/src/byte_stream.cc",
+  "output": "src/CMakeFiles/minnow_sanitized.dir/byte_stream.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o src/CMakeFiles/minnow_sanitized.dir/byte_stream_helpers.cc.o -c /home/cs144/minnow/src/byte_stream_helpers.cc",
+  "file": "/home/cs144/minnow/src/byte_stream_helpers.cc",
+  "output": "src/CMakeFiles/minnow_sanitized.dir/byte_stream_helpers.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o src/CMakeFiles/minnow_optimized.dir/byte_stream.cc.o -c /home/cs144/minnow/src/byte_stream.cc",
+  "file": "/home/cs144/minnow/src/byte_stream.cc",
+  "output": "src/CMakeFiles/minnow_optimized.dir/byte_stream.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o src/CMakeFiles/minnow_optimized.dir/byte_stream_helpers.cc.o -c /home/cs144/minnow/src/byte_stream_helpers.cc",
+  "file": "/home/cs144/minnow/src/byte_stream_helpers.cc",
+  "output": "src/CMakeFiles/minnow_optimized.dir/byte_stream_helpers.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o tests/CMakeFiles/minnow_testing_debug.dir/common.cc.o -c /home/cs144/minnow/tests/common.cc",
+  "file": "/home/cs144/minnow/tests/common.cc",
+  "output": "tests/CMakeFiles/minnow_testing_debug.dir/common.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o tests/CMakeFiles/minnow_testing_sanitized.dir/common.cc.o -c /home/cs144/minnow/tests/common.cc",
+  "file": "/home/cs144/minnow/tests/common.cc",
+  "output": "tests/CMakeFiles/minnow_testing_sanitized.dir/common.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o tests/CMakeFiles/byte_stream_basics_sanitized.dir/byte_stream_basics.cc.o -c /home/cs144/minnow/tests/byte_stream_basics.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_basics.cc",
+  "output": "tests/CMakeFiles/byte_stream_basics_sanitized.dir/byte_stream_basics.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o tests/CMakeFiles/byte_stream_basics.dir/byte_stream_basics.cc.o -c /home/cs144/minnow/tests/byte_stream_basics.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_basics.cc",
+  "output": "tests/CMakeFiles/byte_stream_basics.dir/byte_stream_basics.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o tests/CMakeFiles/byte_stream_capacity_sanitized.dir/byte_stream_capacity.cc.o -c /home/cs144/minnow/tests/byte_stream_capacity.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_capacity.cc",
+  "output": "tests/CMakeFiles/byte_stream_capacity_sanitized.dir/byte_stream_capacity.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o tests/CMakeFiles/byte_stream_capacity.dir/byte_stream_capacity.cc.o -c /home/cs144/minnow/tests/byte_stream_capacity.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_capacity.cc",
+  "output": "tests/CMakeFiles/byte_stream_capacity.dir/byte_stream_capacity.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o tests/CMakeFiles/byte_stream_one_write_sanitized.dir/byte_stream_one_write.cc.o -c /home/cs144/minnow/tests/byte_stream_one_write.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_one_write.cc",
+  "output": "tests/CMakeFiles/byte_stream_one_write_sanitized.dir/byte_stream_one_write.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o tests/CMakeFiles/byte_stream_one_write.dir/byte_stream_one_write.cc.o -c /home/cs144/minnow/tests/byte_stream_one_write.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_one_write.cc",
+  "output": "tests/CMakeFiles/byte_stream_one_write.dir/byte_stream_one_write.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o tests/CMakeFiles/byte_stream_two_writes_sanitized.dir/byte_stream_two_writes.cc.o -c /home/cs144/minnow/tests/byte_stream_two_writes.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_two_writes.cc",
+  "output": "tests/CMakeFiles/byte_stream_two_writes_sanitized.dir/byte_stream_two_writes.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o tests/CMakeFiles/byte_stream_two_writes.dir/byte_stream_two_writes.cc.o -c /home/cs144/minnow/tests/byte_stream_two_writes.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_two_writes.cc",
+  "output": "tests/CMakeFiles/byte_stream_two_writes.dir/byte_stream_two_writes.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o tests/CMakeFiles/byte_stream_many_writes_sanitized.dir/byte_stream_many_writes.cc.o -c /home/cs144/minnow/tests/byte_stream_many_writes.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_many_writes.cc",
+  "output": "tests/CMakeFiles/byte_stream_many_writes_sanitized.dir/byte_stream_many_writes.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o tests/CMakeFiles/byte_stream_many_writes.dir/byte_stream_many_writes.cc.o -c /home/cs144/minnow/tests/byte_stream_many_writes.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_many_writes.cc",
+  "output": "tests/CMakeFiles/byte_stream_many_writes.dir/byte_stream_many_writes.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -fno-sanitize-recover=all -fsanitize=undefined -fsanitize=address -o tests/CMakeFiles/byte_stream_stress_test_sanitized.dir/byte_stream_stress_test.cc.o -c /home/cs144/minnow/tests/byte_stream_stress_test.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_stress_test.cc",
+  "output": "tests/CMakeFiles/byte_stream_stress_test_sanitized.dir/byte_stream_stress_test.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o tests/CMakeFiles/byte_stream_stress_test.dir/byte_stream_stress_test.cc.o -c /home/cs144/minnow/tests/byte_stream_stress_test.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_stress_test.cc",
+  "output": "tests/CMakeFiles/byte_stream_stress_test.dir/byte_stream_stress_test.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -O2 -o tests/CMakeFiles/byte_stream_speed_test.dir/byte_stream_speed_test.cc.o -c /home/cs144/minnow/tests/byte_stream_speed_test.cc",
+  "file": "/home/cs144/minnow/tests/byte_stream_speed_test.cc",
+  "output": "tests/CMakeFiles/byte_stream_speed_test.dir/byte_stream_speed_test.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o apps/CMakeFiles/stream_copy.dir/bidirectional_stream_copy.cc.o -c /home/cs144/minnow/apps/bidirectional_stream_copy.cc",
+  "file": "/home/cs144/minnow/apps/bidirectional_stream_copy.cc",
+  "output": "apps/CMakeFiles/stream_copy.dir/bidirectional_stream_copy.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o apps/CMakeFiles/webget.dir/webget.cc.o -c /home/cs144/minnow/apps/webget.cc",
+  "file": "/home/cs144/minnow/apps/webget.cc",
+  "output": "apps/CMakeFiles/webget.dir/webget.cc.o"
+},
+{
+  "directory": "/home/cs144/minnow/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/home/cs144/minnow/util -I/home/cs144/minnow/src  -Wall -Wpedantic -Wextra -Weffc++ -Werror -Wshadow -Wpointer-arith -Wcast-qual -Wformat=2 -Wno-unqualified-std-cast-call -Wno-non-virtual-dtor -g -std=gnu++20 -fdiagnostics-color=always -o apps/CMakeFiles/tcp_native.dir/tcp_native.cc.o -c /home/cs144/minnow/apps/tcp_native.cc",
+  "file": "/home/cs144/minnow/apps/tcp_native.cc",
+  "output": "apps/CMakeFiles/tcp_native.dir/tcp_native.cc.o"
+}
+]

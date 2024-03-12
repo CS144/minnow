@@ -1,0 +1,196 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"add_dependencies",
+			"add_test_exec"
+		],
+		"files" : 
+		[
+			"tests/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 6,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 33,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 34,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 35,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 8
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 36,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 11
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 11
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 37,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 14
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 14
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 17
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 17
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "byte_stream_basics_sanitized::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "byte_stream_basics::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "byte_stream_capacity_sanitized::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "byte_stream_capacity::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "byte_stream_one_write_sanitized::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "byte_stream_one_write::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "byte_stream_two_writes_sanitized::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "byte_stream_two_writes::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 15,
+			"id" : "byte_stream_many_writes_sanitized::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 16,
+			"id" : "byte_stream_many_writes::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 18,
+			"id" : "byte_stream_stress_test_sanitized::@a44f0ac069e85531cdee"
+		},
+		{
+			"backtrace" : 19,
+			"id" : "byte_stream_stress_test::@a44f0ac069e85531cdee"
+		}
+	],
+	"id" : "functionality_testing::@a44f0ac069e85531cdee",
+	"name" : "functionality_testing",
+	"paths" : 
+	{
+		"build" : "tests",
+		"source" : "tests"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

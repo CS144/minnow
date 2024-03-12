@@ -1,0 +1,192 @@
+{
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"include"
+		],
+		"files" : 
+		[
+			"etc/scanners.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 23,
+				"parent" : 2
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "tidy_apps__bidirectional_stream_copy.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_apps__bidirectional_stream_copy.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_apps__tcp_native.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_apps__webget.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_src__byte_stream.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_src__byte_stream.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_src__byte_stream_helpers.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_basics.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_capacity.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_many_writes.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_one_write.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_speed_test.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_stress_test.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_test_harness.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__byte_stream_two_writes.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__common.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__common.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__conversions.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_tests__test_should_be.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__address.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__address.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__checksum.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__eventloop.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__eventloop.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__exception.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__file_descriptor.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__file_descriptor.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__ipv4_datagram.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__ipv4_header.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__ipv4_header.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__parser.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__random.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__random.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__socket.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__socket.hh::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__tun.cc::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "tidy_util__tun.hh::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "tidy-all::@6890427a1f51a3e7e1df",
+	"name" : "tidy-all",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 3,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/tidy-all",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/tidy-all.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}
