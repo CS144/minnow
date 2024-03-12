@@ -11,18 +11,13 @@ bool Writer::is_closed() const
 
 void Writer::push( string data )
 {
-  uint64_t data_length =data.size();
-  if(!is_closed() && data_length<=capacity_){
-    stream_data.append(data);
-    capacity_-=data_length;
-    total_bytes_pushed+=data_length;
-  }else if (!is_closed() && data_length>capacity_){
-    data=data.substr(0,capacity_);
-    stream_data.append(data);
-    total_bytes_pushed+=capacity_;
-    capacity_=0;
+  uint64_t push_length = min(capacity_,data.size());
+  if(!is_closed()) {
+    data = data.substr( 0, push_length );
+    stream_data.append( data );
+    capacity_ -= push_length;
+    total_bytes_pushed += push_length;
   }
-  return;
 }
 
 void Writer::close()
@@ -42,7 +37,7 @@ uint64_t Writer::bytes_pushed() const
 
 bool Reader::is_finished() const
 {
-  return write_have_been_closed && !stream_data.size();
+  return write_have_been_closed && total_bytes_poped==total_bytes_pushed;
 }
 
 uint64_t Reader::bytes_popped() const
@@ -57,7 +52,7 @@ string_view Reader::peek() const
 
 void Reader::pop( uint64_t len )
 {
-  stream_data=stream_data.substr(len);
+  stream_data.erase(0,len);
   total_bytes_poped+=len;
   capacity_+=len;
 }
