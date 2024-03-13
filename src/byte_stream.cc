@@ -11,8 +11,8 @@ bool Writer::is_closed() const
 
 void Writer::push( string data )
 {
-  uint64_t push_length = min(capacity_,data.size());
-  if(!is_closed()) {
+  uint64_t push_length = min( capacity_, data.size() );
+  if ( !is_closed() ) {
     data = data.substr( 0, push_length );
     stream_data.append( data );
     capacity_ -= push_length;
@@ -22,7 +22,7 @@ void Writer::push( string data )
 
 void Writer::close()
 {
-    write_have_been_closed=true;
+  write_have_been_closed = true;
 }
 
 uint64_t Writer::available_capacity() const
@@ -37,7 +37,7 @@ uint64_t Writer::bytes_pushed() const
 
 bool Reader::is_finished() const
 {
-  return write_have_been_closed && total_bytes_poped==total_bytes_pushed;
+  return write_have_been_closed && total_bytes_poped == total_bytes_pushed;
 }
 
 uint64_t Reader::bytes_popped() const
@@ -52,12 +52,12 @@ string_view Reader::peek() const
 
 void Reader::pop( uint64_t len )
 {
-  stream_data.erase(0,len);
-  total_bytes_poped+=len;
-  capacity_+=len;
+  stream_data.erase( 0, len );
+  total_bytes_poped += len;
+  capacity_ += len;
 }
 
 uint64_t Reader::bytes_buffered() const
 {
-  return total_bytes_pushed-total_bytes_poped;
+  return total_bytes_pushed - total_bytes_poped;
 }

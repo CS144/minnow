@@ -27,7 +27,7 @@ protected:
   bool error_ {};
   std::string stream_data {};
   bool write_have_been_closed = false;
-  uint64_t total_bytes_pushed=0 ;
+  uint64_t total_bytes_pushed = 0;
   uint64_t total_bytes_poped = 0;
 };
 
