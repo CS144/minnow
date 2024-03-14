@@ -8,8 +8,8 @@ import sys
 base = sys.argv[1] if len(sys.argv) > 1 else '.'
 modules = [['byte_stream', 'ByteStream'],
            ['reassembler', 'Reassembler'],
-#           ['tcp_receiver', 'TCPReceiver'],
-#           ['wrapping_integers', 'Wrap32'],
+           ['tcp_receiver', 'TCPReceiver'],
+           ['wrapping_integers', 'Wrap32'],
 #           ['tcp_sender', 'TCPSender'],
 #           ['network_interface', 'NetworkInterface'],
 #           ['router', 'Router']
