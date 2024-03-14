@@ -1,6 +1,9 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <map>
+#include <string>
+#include <vector>
 
 class Reassembler
 {
@@ -42,4 +45,7 @@ public:
 
 private:
   ByteStream output_; // the Reassembler writes to this ByteStream
+  const int val = 114514;
+  std::vector<int> s {};
+  uint64_t need = 0, lastpos = -1, store = 0;
 };
