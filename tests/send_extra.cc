@@ -565,6 +565,50 @@ int main()
       test.execute( Receive { TCPReceiverMessage { .RST = true } } );
       test.execute( HasError { true } );
     }
+    // test credit: Chuyi Zhang
+    {
+      TCPConfig cfg;
+      const Wrap32 isn( rd() );
+      cfg.isn = isn;
+      const string nicechars = "abcdefghijklmnopqrstuvwxyz";
+      string bigstring;
+      for ( unsigned int i = 0; i < TCPConfig::DEFAULT_CAPACITY; i++ ) {
+        bigstring.push_back( nicechars.at( rd() % nicechars.size() ) );
+      }
+      // const size_t window_size = uniform_int_distribution<uint16_t> { 50000, 63000 }( rd );
+      size_t window_size = 63999;
+      TCPSenderTestHarness test { "Deals with FIN conditions for large payloads properly", cfg };
+      test.execute( Push {} );
+      test.execute( ExpectMessage {}.with_no_flags().with_syn( true ).with_payload_size( 0 ).with_seqno( isn ) );
+      test.execute( ExpectSeqno { isn + 1 } );
+      test.execute( ExpectSeqnosInFlight { 1 } );
+      test.execute( AckReceived { Wrap32 { isn + 1 } }.with_win( window_size ) );
+      test.execute( ExpectSeqno { isn + 1 } );
+      test.execute( ExpectSeqnosInFlight { 0 } );
+      test.execute( Push { bigstring }.with_close() );
+      unsigned int i = 0;
+      while ( ( i + TCPConfig::MAX_PAYLOAD_SIZE ) < window_size ) {
+        test.execute( ExpectMessage {}
+                        .with_no_flags()
+                        .with_payload_size( TCPConfig::MAX_PAYLOAD_SIZE )
+                        .with_data( bigstring.substr( i, TCPConfig::MAX_PAYLOAD_SIZE ) )
+                        .with_seqno( isn + 1 + i ) );
+        i += TCPConfig::MAX_PAYLOAD_SIZE;
+      }
+
+      test.execute(
+        ExpectMessage {}.with_payload_size( window_size - i ).with_data( bigstring.substr( i, 999 ) ).with_no_flags() );
+      test.execute( ExpectSeqnosInFlight { window_size } );
+      test.execute( AckReceived { isn + window_size + 1 }.with_win( window_size ) );
+      test.execute( ExpectMessage {}
+                      .with_payload_size( 1 )
+                      .with_data( bigstring.substr( bigstring.size() - 1, 1 ) )
+                      .with_fin( true ) );
+      test.execute( ExpectSeqnosInFlight { 2 } );
+      test.execute( AckReceived { isn + bigstring.size() + 2 }.with_win( window_size ) );
+      test.execute( ExpectSeqno { isn + bigstring.size() + 2 } );
+      test.execute( ExpectSeqnosInFlight { 0 } );
+    }
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return 1;
