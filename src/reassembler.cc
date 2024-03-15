@@ -4,7 +4,7 @@ using namespace std;
 
 void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring )
 {
-if ( is_last_substring ) {
+  if ( is_last_substring ) {
     lastpos = first_index + data.size();
   }
   // exceed window size
@@ -22,8 +22,8 @@ if ( is_last_substring ) {
   // while ( s.size() < first_index + data.size() ) {
   //   s.emplace_back( val );
   // }
-  for(int i=s.size(),j=data.size()+first_index;i<j;i++){
-    s.emplace_back(val);
+  for ( int i = s.size(), j = data.size() + first_index; i < j; i++ ) {
+    s.emplace_back( val );
   }
   for ( auto& ch : data ) {
     if ( s[first_index] == val ) {
