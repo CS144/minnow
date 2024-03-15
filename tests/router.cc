@@ -209,10 +209,11 @@ public:
     hs->connect( _router.interface( hs4_id ) );
     hs->connect( host( "hs_router" ).interface() );
 
-    _router.add_route( ip( "0.0.0.0" ), 0, host( "default_router" ).address(), default_id );
+
     _router.add_route( ip( "10.0.0.0" ), 8, {}, eth0_id );
     _router.add_route( ip( "172.16.0.0" ), 16, {}, eth1_id );
     _router.add_route( ip( "192.168.0.0" ), 24, {}, eth2_id );
+    _router.add_route( ip( "0.0.0.0" ), 0, host( "default_router" ).address(), default_id );
     _router.add_route( ip( "198.178.229.0" ), 24, {}, uun3_id );
     _router.add_route( ip( "143.195.0.0" ), 17, host( "hs_router" ).address(), hs4_id );
     _router.add_route( ip( "143.195.128.0" ), 18, host( "hs_router" ).address(), hs4_id );
