@@ -29,6 +29,6 @@ private:
   Reassembler reassembler_;
   bool have_SYN {};
   Wrap32 zero_point  {0};
-  bool tcp_error {};
+  // bool tcp_error {};
   Wrap32 next_connect {0};
 };

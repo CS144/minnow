@@ -5,7 +5,7 @@ using namespace std;
 void TCPReceiver::receive( TCPSenderMessage message )
 {
   if(message.RST){
-    tcp_error = true;
+    reassembler_.reader().set_error();
     return;
   }
   if(!have_SYN && message.SYN){
@@ -19,7 +19,7 @@ void TCPReceiver::receive( TCPSenderMessage message )
   }else{
     reassembler_.insert(first_index-1,message.payload,message.FIN);
   }
-  // next_connect = message.seqno+message.sequence_length();
+  next_connect = Wrap32::wrap(reassembler_.writer().bytes_pushed()+have_SYN+reassembler_.writer().is_closed(),zero_point);
 }
 
 TCPReceiverMessage TCPReceiver::send() const
@@ -27,8 +27,8 @@ TCPReceiverMessage TCPReceiver::send() const
   uint64_t actually_capacity =reassembler_.writer().available_capacity();
   uint16_t window_size = actually_capacity<=UINT16_MAX?actually_capacity:UINT16_MAX;
   if(have_SYN){
-    return {next_connect,window_size,tcp_error};
+    return {next_connect,window_size,reassembler_.reader().has_error()};
   }else {
-    return {nullopt,window_size,tcp_error};
+    return {nullopt,window_size,reassembler_.reader().has_error()};
   }
 }
