@@ -4,12 +4,31 @@ using namespace std;
 
 void TCPReceiver::receive( TCPSenderMessage message )
 {
-  // Your code here.
-  (void)message;
+  if(message.RST){
+    tcp_error = true;
+    return;
+  }
+  if(!have_SYN && message.SYN){
+    zero_point=message.seqno;
+    have_SYN = true;
+  }
+  uint64_t check_point=reassembler_.writer().bytes_pushed();
+  uint64_t first_index=message.seqno.unwrap(zero_point,check_point);
+  if(message.SYN){
+    reassembler_.insert(first_index,message.payload,message.FIN);
+  }else{
+    reassembler_.insert(first_index-1,message.payload,message.FIN);
+  }
+  // next_connect = message.seqno+message.sequence_length();
 }
 
 TCPReceiverMessage TCPReceiver::send() const
 {
-  // Your code here.
-  return {};
+  uint64_t actually_capacity =reassembler_.writer().available_capacity();
+  uint16_t window_size = actually_capacity<=UINT16_MAX?actually_capacity:UINT16_MAX;
+  if(have_SYN){
+    return {next_connect,window_size,tcp_error};
+  }else {
+    return {nullopt,window_size,tcp_error};
+  }
 }
