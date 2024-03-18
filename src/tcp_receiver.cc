@@ -12,6 +12,7 @@ void TCPReceiver::receive( TCPSenderMessage message )
     zero_point=message.seqno;
     have_SYN = true;
   }
+  if(!have_SYN) return;
   uint64_t check_point=reassembler_.writer().bytes_pushed();
   uint64_t first_index=message.seqno.unwrap(zero_point,check_point);
   if(message.SYN){
@@ -26,9 +27,6 @@ TCPReceiverMessage TCPReceiver::send() const
 {
   uint64_t actually_capacity =reassembler_.writer().available_capacity();
   uint16_t window_size = actually_capacity<=UINT16_MAX?actually_capacity:UINT16_MAX;
-  if(have_SYN){
-    return {next_connect,window_size,reassembler_.reader().has_error()};
-  }else {
-    return {nullopt,window_size,reassembler_.reader().has_error()};
-  }
+  return {next_connect,window_size,reassembler_.reader().has_error()};
+
 }
