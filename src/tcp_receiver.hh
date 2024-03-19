@@ -28,6 +28,6 @@ public:
 private:
   Reassembler reassembler_;
   bool have_SYN {};
-  Wrap32 zero_point  {0};
+  Wrap32 zero_point { 0 };
   std::optional<Wrap32> next_connect {};
 };
