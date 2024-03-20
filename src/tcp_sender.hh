@@ -54,6 +54,6 @@ private:
   uint64_t abs_sender_num {};
   timer_state my_timer{};
   std::queue<TCPSenderMessage> my_sender_queue {};
-  bool FIN {};
+  bool FIN_ {};
 
 };

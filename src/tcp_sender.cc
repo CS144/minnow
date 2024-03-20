@@ -13,50 +13,100 @@ uint64_t TCPSender::consecutive_retransmissions() const
   return my_timer.peek_count();
 }
 
+// void TCPSender::push( const TransmitFunction& transmit )
+// {
+//   if  ( report_window_size && abs_sender_num-abs_acked_num >= report_window_size  ) {
+//     return;
+//   }
+//   string payload {};
+//   if(!my_timer.is_running()) my_timer.state_reset(initial_RTO_ms_);
+//   TCPSenderMessage my_tcp_msg;
+//   Wrap32 tcp_32_seq = Wrap32::wrap(abs_sender_num,isn_);
+//   bool has_finished=reader().is_finished();
+//   if(!report_window_size){
+//     my_tcp_msg = {tcp_32_seq,false,payload,false,reader().has_error()};
+//     transmit(my_tcp_msg);
+//     return;
+//   }
+//   uint16_t win = report_window_size - sequence_numbers_in_flight() - static_cast<uint16_t>( tcp_32_seq == isn_ );
+//   while(win || tcp_32_seq==isn_ ||  (!FIN&& has_finished)){
+//     uint16_t len = win<TCPConfig::MAX_PAYLOAD_SIZE?win:TCPConfig::MAX_PAYLOAD_SIZE;
+//     win-=len;
+//     read(input_.reader(),len,payload);
+//     my_tcp_msg ={tcp_32_seq,tcp_32_seq==isn_,payload,false,reader().has_error()};
+
+//     if ( !FIN && has_finished && win==0
+//          && ( sequence_numbers_in_flight() + my_tcp_msg.sequence_length() < report_window_size
+//               || ( report_window_size == 0 && my_tcp_msg.sequence_length() == 0 ) ) ) {
+//       FIN = my_tcp_msg.FIN = true;
+//     }
+//     transmit(my_tcp_msg);
+//     my_sender_queue.push(my_tcp_msg);
+//     abs_sender_num+=my_tcp_msg.sequence_length();
+//   if ( !FIN && has_finished && len == payload.size() ) {
+//     break;
+//   }
+//     tcp_32_seq = Wrap32::wrap(abs_sender_num,isn_);
+//   }
+  
+// }
+
 void TCPSender::push( const TransmitFunction& transmit )
 {
-  if  ( report_window_size && abs_sender_num-abs_acked_num >= report_window_size  ) {
+  // 1.达到最大传输字节数（窗口大小）
+  // 2.仅传输中的序列号没了且window_size=0才需要发送假消息，如果还有序列号才传输中，可以利用这些得到ack更新size（传输失败就重传）
+  if ( ( report_window_size && sequence_numbers_in_flight() >= report_window_size )
+       || ( report_window_size == 0 && sequence_numbers_in_flight() >= 1 ) ) {
     return;
   }
-  string payload {};
-  if(!my_timer.is_running()) my_timer.state_reset(initial_RTO_ms_);
-  TCPSenderMessage my_tcp_msg;
-  Wrap32 tcp_32_seq = Wrap32::wrap(abs_sender_num,isn_);
-  bool has_finished=reader().is_finished();
-  if(!report_window_size){
-    my_tcp_msg = {tcp_32_seq,false,payload,false,false};
-    transmit(my_tcp_msg);
-    return;
-  }
-  uint16_t win = report_window_size - sequence_numbers_in_flight() - static_cast<uint16_t>( tcp_32_seq == isn_ );
-  while(win || tcp_32_seq==isn_ ||  (!FIN&& has_finished)){
-    uint16_t len = win<TCPConfig::MAX_PAYLOAD_SIZE?win:TCPConfig::MAX_PAYLOAD_SIZE;
-    win-=len;
-    read(input_.reader(),len,payload);
-    my_tcp_msg.seqno=tcp_32_seq;
-    my_tcp_msg.SYN= tcp_32_seq==isn_;
-    my_tcp_msg.FIN= false;
-    my_tcp_msg.RST=reader().has_error();
-    my_tcp_msg.payload=payload;
 
-    if ( !FIN && has_finished && win==0
-         && ( sequence_numbers_in_flight() + my_tcp_msg.sequence_length() < report_window_size
-              || ( report_window_size == 0 && my_tcp_msg.sequence_length() == 0 ) ) ) {
-      FIN = my_tcp_msg.FIN = true;
+  auto seqno = Wrap32::wrap( abs_sender_num, isn_ );
+
+  // 限制从buffer中取出来的字节数
+  auto win
+    = report_window_size == 0 ? 1 : report_window_size - sequence_numbers_in_flight() - static_cast<uint16_t>( seqno == isn_ );
+
+  string out;
+  read(input_.reader(),win,out);
+
+  size_t len;
+  string_view view( out );
+
+  while ( !view.empty() || seqno == isn_ || ( !FIN_ && writer().is_closed() ) ) {
+    len = min( view.size(), TCPConfig::MAX_PAYLOAD_SIZE );
+
+    string payload( view.substr( 0, len ) );
+
+    TCPSenderMessage message { seqno, seqno == isn_, move( payload ), false, writer().has_error() };
+
+    // 1.当前窗口大小限制携带不了FIN，留着以后发，没有新的消息了直接退出，否则携带
+    // 2.zero窗口仅当message为0时才能携带（因为视为窗口大小为1）
+    if ( !FIN_ && writer().is_closed() && len == view.size()
+         && ( sequence_numbers_in_flight() + message.sequence_length() < report_window_size
+              || ( report_window_size == 0 && message.sequence_length() == 0 ) ) ) {
+      FIN_ = message.FIN = true;
     }
-    transmit(my_tcp_msg);
-    my_sender_queue.push(my_tcp_msg);
-    abs_sender_num+=my_tcp_msg.sequence_length();
-    tcp_32_seq = Wrap32::wrap(abs_sender_num,isn_);
+
+    transmit( message );
+
+    abs_sender_num += message.sequence_length();
+    my_sender_queue.emplace( move( message ) );
+
+    // 当前窗口大小限制携带不了FIN，留着以后发，没有新的消息了直接退出
+    if ( !FIN_ && writer().is_closed() && len == view.size() ) {
+      break;
+    }
+    seqno = Wrap32::wrap( abs_sender_num, isn_ );
+    view.remove_prefix( len );
   }
-  
 }
+
 
 
 TCPSenderMessage TCPSender::make_empty_message() const
 {
   Wrap32 temp = Wrap32::wrap(abs_sender_num,isn_);
-  return TCPSenderMessage {temp,false,"",false,false};
+  return TCPSenderMessage {temp,false,"",false,reader().has_error()};
 }
 
 void TCPSender::receive( const TCPReceiverMessage& msg )
