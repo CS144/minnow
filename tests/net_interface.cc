@@ -320,6 +320,55 @@ int main()
         serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "10.0.0.1", {}, "10.0.0.5" ) ) ) } );
       test.execute( ExpectNoFrame {} );
     }
+
+    // New test case: Shiva Khanna Yamamoto
+    {
+      const EthernetAddress local_eth = random_private_ethernet_address();
+      NetworkInterfaceTestHarness test { "ARP Replies trigger correct Ethernet Frame send", local_eth, Address( "5.5.5.5", 0 ) };
+
+      int dst_suffix = 1;
+      int dst_suffix_2 = 1;
+      int dst_suffix_3 = 1;
+
+      // run 50 times
+      for ( int i = 0; i < 50; i++ ) {
+
+        // call send_datagram expecting two ARP requests
+        const auto datagram_1 = make_datagram( "5.6.7.8", "14.12.11." + to_string( dst_suffix_2 ) );
+        const auto datagram_2 = make_datagram( "5.6.7.8", "14.12.11." + to_string( dst_suffix_2 + 1 ) );
+        test.execute( SendDatagram { datagram_1, Address( "192.168.0." + to_string( dst_suffix_3 ), 0 ) } );
+        test.execute( SendDatagram { datagram_2, Address( "192.168.0." + to_string( dst_suffix_3 + 1 ), 0 ) } );
+        test.execute( ExpectFrame { make_frame(
+          local_eth,
+          ETHERNET_BROADCAST,
+          EthernetHeader::TYPE_ARP,
+          serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "5.5.5.5", {}, "192.168.0." + to_string( dst_suffix_3 ) ) ) ) } );
+        test.execute( ExpectFrame { make_frame(
+          local_eth,
+          ETHERNET_BROADCAST,
+          EthernetHeader::TYPE_ARP,
+          serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "5.5.5.5", {}, "192.168.0." + to_string( dst_suffix_3 + 1 ) ) ) ) } );
+
+        // call recv_frame once, expecting only one ARP Reply followed by transmission of the correct Ethernet Frame
+        const EthernetAddress target_eth = random_private_ethernet_address();
+        test.execute( ReceiveFrame {
+          make_frame(
+            target_eth,
+            local_eth,
+            EthernetHeader::TYPE_ARP, 
+            serialize( make_arp( ARPMessage::OPCODE_REPLY, target_eth, "192.168.0." + to_string( dst_suffix_3 + 1 ), local_eth, "5.5.5.5" ) ) ),
+          {} } );
+        test.execute(
+          ExpectFrame { make_frame( local_eth, target_eth, EthernetHeader::TYPE_IPv4, serialize( datagram_2 ) ) } );
+        test.execute( ExpectNoFrame {} );
+
+        // change destination addrs
+        dst_suffix = dst_suffix + 2;
+        dst_suffix_2 = dst_suffix_2 + 2;
+        dst_suffix_3 = dst_suffix_3 + 2;
+      }
+    }
+
   } catch ( const exception& e ) {
     cerr << e.what() << endl;
     return EXIT_FAILURE;
